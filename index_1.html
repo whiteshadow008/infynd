@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inflation Prediction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e1a;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #1a1f35;
+            border-radius: 20px;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 1px solid #2a3350;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            color: #0a0e1a;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 50px;
+        }
+        
+        .form-section {
+            background: linear-gradient(135deg, #1a1f35 0%, #2a3350 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 40px;
+            box-shadow: 0 5px 20px rgba(0, 255, 204, 0.15);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+        
+        .form-section h2 {
+            color: #e6f1ff;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .form-group {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .form-group label {
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #e6f1ff;
+        }
+        
+        .form-group input[type="month"] {
+            padding: 15px 25px;
+            font-size: 1.1em;
+            border: 3px solid #00ffcc;
+            border-radius: 10px;
+            outline: none;
+            transition: all 0.3s;
+            min-width: 200px;
+            background: #0a0e1a;
+            color: #e6f1ff;
+        }
+        
+        .form-group input[type="month"]:focus {
+            border-color: #00d4ff;
+            box-shadow: 0 0 0 4px rgba(0, 255, 204, 0.2);
+            transform: scale(1.05);
+        }
+        
+        .btn-predict {
+            padding: 15px 50px;
+            font-size: 1.2em;
+            font-weight: 700;
+            color: #0a0e1a;
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(0, 255, 204, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-predict:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 255, 204, 0.5);
+        }
+        
+        .btn-predict:active {
+            transform: translateY(0);
+        }
+        
+        .alert {
+            padding: 20px 25px;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            font-weight: 500;
+            font-size: 1.1em;
+        }
+        
+        .alert-error {
+            background-color: rgba(220, 53, 69, 0.2);
+            color: #ff6b6b;
+            border: 2px solid rgba(220, 53, 69, 0.3);
+        }
+        
+        .alert-info {
+            background-color: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            border: 2px solid rgba(0, 255, 204, 0.3);
+        }
+        
+        .prediction-result {
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            color: #0a0e1a;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.4);
+            animation: slideDown 0.5s ease-out;
+        }
+        
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .prediction-result h2 {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            opacity: 0.95;
+            font-weight: 600;
+        }
+        
+        .inflation-percentage {
+            font-size: 4em;
+            font-weight: bold;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+            margin-bottom: 15px;
+        }
+        
+        .inflation-status {
+            font-size: 2em;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: #2a3350;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            text-align: center;
+            border-left: 6px solid;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .stat-card.avg {
+            border-left-color: #00ffcc;
+            background: linear-gradient(135deg, #2a3350 0%, #1f3d3d 100%);
+        }
+        
+        .stat-card.deviation {
+            border-left-color: #00d4ff;
+            background: linear-gradient(135deg, #2a3350 0%, #1f3542 100%);
+        }
+        
+        .stat-number {
+            font-size: 2.8em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #00ffcc;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            color: #8892b0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+        
+        .chart-section {
+            margin-top: 40px;
+        }
+        
+        .section-title {
+            font-size: 2em;
+            color: #e6f1ff;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #00ffcc;
+            text-align: center;
+        }
+        
+        .chart-container {
+            background: #2a3350;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 255, 204, 0.1);
+            border: 1px solid rgba(0, 255, 204, 0.2);
+        }
+        
+        .chart-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .form-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-predict {
+                width: 100%;
+            }
+            
+            .inflation-percentage {
+                font-size: 3em;
+            }
+            
+            .inflation-status {
+                font-size: 1.5em;
+            }
+            
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Inflation Prediction</h1>
+            <p>Predict future inflation rate for any month</p>
+        </div>
+        
+        <div class="content">
+            <div class="form-section">
+                <h2>🔮 Select Month</h2>
+                <form method="POST" action="/">
+                    <div class="form-group">
+                        <label for="prediction_date">📅 Choose Month:</label>
+                        <input type="month" id="prediction_date" name="prediction_date" required>
+                        <button type="submit" class="btn-predict">🚀 Predict</button>
+                    </div>
+                </form>
+            </div>
+            
+            {% if error_message %}
+            <div class="alert alert-error">
+                ⚠️ {{ error_message }}
+            </div>
+            {% endif %}
+            
+            {% if prediction_month %}
+            <div class="alert alert-info">
+                📅 Prediction for: <strong>{{ prediction_month }}</strong>
+            </div>
+            
+            <div class="prediction-result">
+                <h2>🎯 Predicted Inflation Rate</h2>
+                <div class="inflation-percentage">{{ predicted_inflation|round(2) }}%</div>
+                <div class="inflation-status">{{ inflation_status }}</div>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card avg">
+                    <div class="stat-number">{{ avg_inflation }}%</div>
+                    <div class="stat-label">📊 Historical Average</div>
+                </div>
+                <div class="stat-card deviation">
+                    <div class="stat-number">{{ deviation|abs }}%</div>
+                    <div class="stat-label">
+                        {% if deviation > 0 %}
+                            📈 Above Average
+                        {% else %}
+                            📉 Below Average
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            {% if plot_url %}
+            <div class="chart-section">
+                <h2 class="section-title">📈 Inflation Trend</h2>
+                <div class="chart-container">
+                    <img src="data:image/png;base64,{{ plot_url }}" alt="Inflation Chart">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Sentiment Tracker Pro</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
+    <style>
+       
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00ff88;
+            --secondary: #0e274d;
+            --dark: #0a0e1a;
+            --card: #151925;
+            --text: #e0e6f0;
+            --text-dim: #8b95a8;
+            --success: #00ff88;
+            --danger: #ff4466;
+            --warning: #ffaa00;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--dark);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var( #00ff88), var(#0e274d));
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .main-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .header h1 {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+
+        .metric-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .metric-card h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .metric-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .alert-custom {
+            background: linear-gradient(135deg, #e74a3b 0%, #c0392b 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .chart-container {
+            background: #f8f9fc;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-content {
+            padding: 20px 0;
+        }
+
+        .nav-tabs .nav-link {
+            color: #667eea;
+            font-weight: 600;
+            border: none;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-tabs .nav-link.active {
+            color: #764ba2;
+            border-bottom: 3px solid #764ba2;
+            background: transparent;
+        }
+
+        .post-card {
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f8f9fc;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .post-card:hover {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .post-card.positive {
+            border-left-color: var(--success-color);
+        }
+
+        .post-card.negative {
+            border-left-color: var(--danger-color);
+        }
+
+        .post-card.neutral {
+            border-left-color: var(--warning-color);
+        }
+
+        .sentiment-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .sentiment-positive {
+            background: #1cc88a;
+            color: white;
+        }
+
+        .sentiment-negative {
+            background: #e74a3b;
+            color: white;
+        }
+
+        .sentiment-neutral {
+            background: #f6c23e;
+            color: #333;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading-spinner.active {
+            display: block;
+        }
+
+        .wordcloud-img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .insights-box {
+            background: linear-gradient(135deg, #36b9cc 0%, #258391 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .insights-box h4 {
+            margin-bottom: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e3e6f0;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Social Media Sentiment Tracker Pro</h1>
+            <p>AI Hackathon Minds 2025 | Real-time Brand Sentiment Analysis</p>
+        </div>
+
+        <!-- Data Source Selection -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="fas fa-database"></i> Data Source</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label class="form-label fw-bold">Analysis Method</label>
+                                <select class="form-select" id="analysisMethod">
+                                    <option value="textblob">TextBlob (Fast)</option>
+                                    <option value="huggingface">Hugging Face BART</option>
+                                </select>
+                            </div>
+                            <div class="col-md-9">
+                                <label class="form-label fw-bold">Select Data Source</label>
+                                <div class="btn-group w-100" role="group">
+                                    <input type="radio" class="btn-check" name="dataSource" id="sampleData" checked>
+                                    <label class="btn btn-outline-primary" for="sampleData">
+                                        <i class="fas fa-database"></i> Sample Data
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="dataSource" id="twitterData">
+                                    <label class="btn btn-outline-primary" for="twitterData">
+                                        <i class="fab fa-twitter"></i> Twitter API
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="dataSource" id="csvData">
+                                    <label class="btn btn-outline-primary" for="csvData">
+                                        <i class="fas fa-file-csv"></i> Upload CSV
+                                    </label>
+
+                                    <input type="radio" class="btn-check" name="dataSource" id="manualData">
+                                    <label class="btn btn-outline-primary" for="manualData">
+                                        <i class="fas fa-keyboard"></i> Manual Entry
+                                    </label>
+                                    <button onclick="window.open('http://localhost:5001', '_blank')" 
+        style="padding:10px 20px; background-color:#007BFF; color:white; border:none; border-radius:8px; cursor:pointer;">
+  Open Brand Sentiment Dashboard
+</button>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sample Data Options -->
+                        <div id="sampleDataOptions" class="mt-3">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Number of Posts</label>
+                                    <input type="number" class="form-control" id="numSamplePosts" value="100" min="10" max="500">
+                                </div>
+                                <div class="col-md-6 d-flex align-items-end">
+                                    <button class="btn btn-primary w-100" onclick="loadSampleData()">
+                                        <i class="fas fa-play"></i> Load Sample Data
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Twitter Options -->
+                        <div id="twitterOptions" class="mt-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Twitter Username (without @)</label>
+                                    <input type="text" class="form-control" id="twitterUsername" placeholder="elonmusk">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Number of Tweets</label>
+                                    <input type="number" class="form-control" id="numTweets" value="50" min="10" max="100">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button class="btn btn-primary w-100" onclick="loadTwitterData()">
+                                        <i class="fab fa-twitter"></i> Fetch Tweets
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CSV Upload Options -->
+                        <div id="csvOptions" class="mt-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <label class="form-label">Upload CSV File (must contain 'text' column)</label>
+                                    <input type="file" class="form-control" id="csvFile" accept=".csv">
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button class="btn btn-primary w-100" onclick="uploadCSV()">
+                                        <i class="fas fa-upload"></i> Upload & Analyze
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Manual Entry Options -->
+                        <div id="manualOptions" class="mt-3" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Post Text</label>
+                                    <textarea class="form-control" id="manualText" rows="3" placeholder="Enter post text..."></textarea>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Platform</label>
+                                    <select class="form-select" id="manualPlatform">
+                                        <option>Twitter</option>
+                                        <option>Facebook</option>
+                                        <option>Instagram</option>
+                                        <option>Reddit</option>
+                                        <option>LinkedIn</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label">Author</label>
+                                    <input type="text" class="form-control" id="manualAuthor" placeholder="@username" value="@user">
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary" onclick="addManualPost()">
+                                        <i class="fas fa-plus"></i> Add Post
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Analyzing sentiment data...</p>
+        </div>
+
+        <!-- Alert System -->
+        <div id="alertContainer"></div>
+
+        <!-- Key Metrics -->
+        <div id="metricsSection" style="display: none;">
+            <div class="row mb-4">
+                <div class="col-md-2">
+                    <div class="metric-card">
+                        <h3 id="totalPosts">0</h3>
+                        <p>Total Posts</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="metric-card" style="background: linear-gradient(135deg, #1cc88a 0%, #13855c 100%);">
+                        <h3 id="positiveCount">0</h3>
+                        <p id="positivePct">0%</p>
+                        <small>Positive</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="metric-card" style="background: linear-gradient(135deg, #f6c23e 0%, #d4a01e 100%);">
+                        <h3 id="neutralCount">0</h3>
+                        <p id="neutralPct">0%</p>
+                        <small>Neutral</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="metric-card" style="background: linear-gradient(135deg, #e74a3b 0%, #c0392b 100%);">
+                        <h3 id="negativeCount">0</h3>
+                        <p id="negativePct">0%</p>
+                        <small>Negative</small>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="metric-card" style="background: linear-gradient(135deg, #36b9cc 0%, #258391 100%);">
+                        <h3 id="avgPolarity">0.0</h3>
+                        <p>Avg Score</p>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="metric-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <h3 id="totalEngagement">0</h3>
+                        <p>Engagement</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#overviewTab">
+                        <i class="fas fa-chart-pie"></i> Overview
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#trendsTab">
+                        <i class="fas fa-chart-line"></i> Trends
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#keywordsTab">
+                        <i class="fas fa-hashtag"></i> Keywords
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#wordcloudTab">
+                        <i class="fas fa-cloud"></i> Word Clouds
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#postsTab">
+                        <i class="fas fa-comments"></i> Posts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#insightsTab">
+                        <i class="fas fa-lightbulb"></i> AI Insights
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Overview Tab -->
+                <div id="overviewTab" class="tab-pane fade show active">
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h5>Sentiment Distribution</h5>
+                                <canvas id="sentimentPieChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="chart-container">
+                                <h5>Platform Distribution</h5>
+                                <canvas id="platformChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="chart-container">
+                                <h5>Engagement by Sentiment</h5>
+                                <canvas id="engagementChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trends Tab -->
+                <div id="trendsTab" class="tab-pane fade">
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="chart-container">
+                                <h5>Sentiment Over Time</h5>
+                                <canvas id="timelineChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="chart-container">
+                                <h5>Sentiment Score Distribution</h5>
+                                <canvas id="polarityChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keywords Tab -->
+                <div id="keywordsTab" class="tab-pane fade">
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <div class="chart-container">
+                                <h5><i class="fas fa-hashtag"></i> Top Hashtags</h5>
+                                <canvas id="hashtagsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="chart-container">
+                                <h5><i class="fas fa-at"></i> Top Mentions</h5>
+                                <canvas id="mentionsChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="chart-container">
+                                <h5><i class="fas fa-key"></i> Top Keywords</h5>
+                                <canvas id="keywordsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Word Cloud Tab -->
+                <div id="wordcloudTab" class="tab-pane fade">
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-center mb-3">
+                            <button class="btn btn-success" onclick="generateWordCloud('Positive')">
+                                <i class="fas fa-smile"></i> Positive Words
+                            </button>
+                            <button class="btn btn-warning" onclick="generateWordCloud('Neutral')">
+                                <i class="fas fa-meh"></i> Neutral Words
+                            </button>
+                            <button class="btn btn-danger" onclick="generateWordCloud('Negative')">
+                                <i class="fas fa-frown"></i> Negative Words
+                            </button>
+                            <button class="btn btn-info" onclick="generateWordCloud(null)">
+                                <i class="fas fa-cloud"></i> All Words
+                            </button>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="chart-container text-center">
+                                <div id="wordcloudLoading" style="display: none;">
+                                    <div class="spinner-border text-primary" role="status"></div>
+                                    <p>Generating word cloud...</p>
+                                </div>
+                                <img id="wordcloudImage" class="wordcloud-img" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posts Tab -->
+                <div id="postsTab" class="tab-pane fade">
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold">Filter by Sentiment:</label>
+                                <select class="form-select" id="postFilter" onchange="filterPosts()">
+                                    <option value="All">All Posts</option>
+                                    <option value="Positive">Positive Only</option>
+                                    <option value="Neutral">Neutral Only</option>
+                                    <option value="Negative">Negative Only</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <button class="btn btn-success btn-sm" onclick="exportData()">
+                                    <i class="fas fa-download"></i> Export as CSV
+                                </button>
+                            </div>
+                            <div id="postsContainer"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Insights Tab -->
+                <div id="insightsTab" class="tab-pane fade">
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-center mb-3">
+                            <button class="btn btn-primary btn-lg" onclick="generateInsights()">
+                                <i class="fas fa-magic"></i> Generate AI Insights
+                            </button>
+                        </div>
+                        <div class="col-md-12">
+                            <div id="insightsContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>Social Media Sentiment Tracker Pro</strong> | AI Hackathon Minds 2025</p>
+            <p>Built with Flask, Chart.js, Bootstrap | Twitter API, Hugging Face, TextBlob</p>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Global variables
+        let currentData = [];
+        let currentMetrics = {};
+        let currentTrending = {};
+        let charts = {};
+
+        // Data source switching
+        document.querySelectorAll('input[name="dataSource"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('sampleDataOptions').style.display = 'none';
+                document.getElementById('twitterOptions').style.display = 'none';
+                document.getElementById('csvOptions').style.display = 'none';
+                document.getElementById('manualOptions').style.display = 'none';
+
+                if (this.id === 'sampleData') {
+                    document.getElementById('sampleDataOptions').style.display = 'block';
+                } else if (this.id === 'twitterData') {
+                    document.getElementById('twitterOptions').style.display = 'block';
+                } else if (this.id === 'csvData') {
+                    document.getElementById('csvOptions').style.display = 'block';
+                } else if (this.id === 'manualData') {
+                    document.getElementById('manualOptions').style.display = 'block';
+                }
+            });
+        });
+
+        // Load Sample Data
+        async function loadSampleData() {
+            showLoading(true);
+            const numPosts = document.getElementById('numSamplePosts').value;
+
+            try {
+                const response = await fetch(`/api/sample-data?num_posts=${numPosts}`);
+                const result = await response.json();
+
+                if (result.success) {
+                    currentData = result.data;
+                    currentMetrics = result.metrics;
+                    currentTrending = result.trending;
+                    updateDashboard();
+                    showAlert('success', '✅ Sample data loaded successfully!');
+                } else {
+                    showAlert('danger', '❌ Error loading data');
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Load Twitter Data
+        async function loadTwitterData() {
+            const username = document.getElementById('twitterUsername').value.trim();
+            const numTweets = document.getElementById('numTweets').value;
+            const useHF = document.getElementById('analysisMethod').value === 'huggingface';
+
+            if (!username) {
+                showAlert('warning', '⚠️ Please enter a Twitter username');
+                return;
+            }
+
+            showLoading(true);
+
+            try {
+                const response = await fetch('/api/twitter-data', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        username: username,
+                        num_tweets: parseInt(numTweets),
+                        use_huggingface: useHF
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentData = result.data;
+                    currentMetrics = result.metrics;
+                    currentTrending = result.trending;
+                    updateDashboard();
+                    showAlert('success', `✅ Successfully fetched ${result.data.length} tweets from @${username}!`);
+                } else {
+                    showAlert('danger', '❌ ' + result.error);
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Upload CSV
+        async function uploadCSV() {
+            const fileInput = document.getElementById('csvFile');
+            const file = fileInput.files[0];
+            const useHF = document.getElementById('analysisMethod').value === 'huggingface';
+
+            if (!file) {
+                showAlert('warning', '⚠️ Please select a CSV file');
+                return;
+            }
+
+            showLoading(true);
+
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('use_huggingface', useHF);
+
+            try {
+                const response = await fetch('/api/upload-csv', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentData = result.data;
+                    currentMetrics = result.metrics;
+                    currentTrending = result.trending;
+                    updateDashboard();
+                    showAlert('success', `✅ CSV uploaded and analyzed successfully! (${result.data.length} posts)`);
+                } else {
+                    showAlert('danger', '❌ ' + result.error);
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error: ' + error.message);
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Add Manual Post
+        async function addManualPost() {
+            const text = document.getElementById('manualText').value.trim();
+            const platform = document.getElementById('manualPlatform').value;
+            const author = document.getElementById('manualAuthor').value.trim();
+            const useHF = document.getElementById('analysisMethod').value === 'huggingface';
+
+            if (!text) {
+                showAlert('warning', '⚠️ Please enter post text');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/analyze-text', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        text: text,
+                        platform: platform,
+                        author: author,
+                        use_huggingface: useHF
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    currentData.push(result.post);
+                    recalculateMetrics();
+                    updateDashboard();
+                    document.getElementById('manualText').value = '';
+                    showAlert('success', '✅ Post added successfully!');
+                } else {
+                    showAlert('danger', '❌ ' + result.error);
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error: ' + error.message);
+            }
+        }
+
+        // Update Dashboard
+        function updateDashboard() {
+            // Show metrics section
+            document.getElementById('metricsSection').style.display = 'block';
+
+            // Update metrics
+            document.getElementById('totalPosts').textContent = currentMetrics.total_posts || 0;
+            document.getElementById('positiveCount').textContent = currentMetrics.positive_count || 0;
+            document.getElementById('positivePct').textContent = (currentMetrics.positive_pct || 0) + '%';
+            document.getElementById('neutralCount').textContent = currentMetrics.neutral_count || 0;
+            document.getElementById('neutralPct').textContent = (currentMetrics.neutral_pct || 0) + '%';
+            document.getElementById('negativeCount').textContent = currentMetrics.negative_count || 0;
+            document.getElementById('negativePct').textContent = (currentMetrics.negative_pct || 0) + '%';
+            document.getElementById('avgPolarity').textContent = (currentMetrics.avg_polarity || 0).toFixed(2);
+            document.getElementById('totalEngagement').textContent = currentMetrics.total_engagement || 0;
+
+            // Check for alert
+            if (currentMetrics.negative_pct > 30) {
+                showAlert('danger', `🚨 CRITICAL ALERT: Negative sentiment is at ${currentMetrics.negative_pct}%! Immediate action required.`, false);
+            }
+
+            // Update charts
+            updateCharts();
+            displayPosts();
+        }
+
+        // Update Charts
+        function updateCharts() {
+            // Sentiment Pie Chart
+            updateSentimentPieChart();
+            updatePlatformChart();
+            updateEngagementChart();
+            updateTimelineChart();
+            updatePolarityChart();
+            updateKeywordCharts();
+        }
+
+        // Sentiment Pie Chart
+        function updateSentimentPieChart() {
+            const ctx = document.getElementById('sentimentPieChart');
+            if (charts.sentimentPie) charts.sentimentPie.destroy();
+
+            charts.sentimentPie = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Positive', 'Neutral', 'Negative'],
+                    datasets: [{
+                        data: [
+                            currentMetrics.positive_count,
+                            currentMetrics.neutral_count,
+                            currentMetrics.negative_count
+                        ],
+                        backgroundColor: ['#1cc88a', '#f6c23e', '#e74a3b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {position: 'bottom'}
+                    }
+                }
+            });
+        }
+
+        // Platform Chart
+        function updatePlatformChart() {
+            const platforms = {};
+            currentData.forEach(post => {
+                platforms[post.platform] = (platforms[post.platform] || 0) + 1;
+            });
+
+            const ctx = document.getElementById('platformChart');
+            if (charts.platform) charts.platform.destroy();
+
+            charts.platform = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(platforms),
+                    datasets: [{
+                        label: 'Posts',
+                        data: Object.values(platforms),
+                        backgroundColor: '#667eea'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: false}
+                    }
+                }
+            });
+        }
+
+        // Engagement Chart
+        function updateEngagementChart() {
+            const engagementData = {
+                Positive: {likes: 0, retweets: 0, count: 0},
+                Neutral: {likes: 0, retweets: 0, count: 0},
+                Negative: {likes: 0, retweets: 0, count: 0}
+            };
+
+            currentData.forEach(post => {
+                engagementData[post.sentiment].likes += post.likes || 0;
+                engagementData[post.sentiment].retweets += post.retweets || 0;
+                engagementData[post.sentiment].count++;
+            });
+
+            const labels = Object.keys(engagementData);
+            const avgLikes = labels.map(s => engagementData[s].likes / (engagementData[s].count || 1));
+            const avgRetweets = labels.map(s => engagementData[s].retweets / (engagementData[s].count || 1));
+
+            const ctx = document.getElementById('engagementChart');
+            if (charts.engagement) charts.engagement.destroy();
+
+            charts.engagement = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Avg Likes',
+                            data: avgLikes,
+                            backgroundColor: '#36b9cc'
+                        },
+                        {
+                            label: 'Avg Retweets',
+                            data: avgRetweets,
+                            backgroundColor: '#4e73df'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {position: 'top'}
+                    }
+                }
+            });
+        }
+
+        // Timeline Chart
+        function updateTimelineChart() {
+            const timeData = {};
+            currentData.forEach(post => {
+                const date = new Date(post.timestamp).toLocaleDateString();
+                if (!timeData[date]) {
+                    timeData[date] = {Positive: 0, Neutral: 0, Negative: 0};
+                }
+                timeData[date][post.sentiment]++;
+            });
+
+            const dates = Object.keys(timeData).sort();
+
+            const ctx = document.getElementById('timelineChart');
+            if (charts.timeline) charts.timeline.destroy();
+
+            charts.timeline = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [
+                        {
+                            label: 'Positive',
+                            data: dates.map(d => timeData[d].Positive),
+                            borderColor: '#1cc88a',
+                            fill: false
+                        },
+                        {
+                            label: 'Neutral',
+                            data: dates.map(d => timeData[d].Neutral),
+                            borderColor: '#f6c23e',
+                            fill: false
+                        },
+                        {
+                            label: 'Negative',
+                            data: dates.map(d => timeData[d].Negative),
+                            borderColor: '#e74a3b',
+                            fill: false
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {position: 'top'}
+                    }
+                }
+            });
+        }
+
+        // Polarity Chart
+        function updatePolarityChart() {
+            const polarities = currentData.map(p => p.polarity);
+
+            const ctx = document.getElementById('polarityChart');
+            if (charts.polarity) charts.polarity.destroy();
+
+            charts.polarity = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: currentData.map((_, i) => i + 1),
+                    datasets: [{
+                        label: 'Sentiment Score',
+                        data: polarities,
+                        backgroundColor: polarities.map(p => p > 0 ? '#1cc88a' : p < 0 ? '#e74a3b' : '#f6c23e')
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {display: false}
+                    },
+                    scales: {
+                        y: {
+                            min: -1,
+                            max: 1
+                        }
+                    }
+                }
+            });
+        }
+
+        // Keyword Charts
+        function updateKeywordCharts() {
+            // Hashtags
+            if (currentTrending.hashtags && currentTrending.hashtags.length > 0) {
+                const ctx = document.getElementById('hashtagsChart');
+                if (charts.hashtags) charts.hashtags.destroy();
+
+                charts.hashtags = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentTrending.hashtags.slice(0, 10).map(h => h.tag),
+                        datasets: [{
+                            label: 'Count',
+                            data: currentTrending.hashtags.slice(0, 10).map(h => h.count),
+                            backgroundColor: '#667eea'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {legend: {display: false}}
+                    }
+                });
+            }
+
+            // Mentions
+            if (currentTrending.mentions && currentTrending.mentions.length > 0) {
+                const ctx = document.getElementById('mentionsChart');
+                if (charts.mentions) charts.mentions.destroy();
+
+                charts.mentions = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentTrending.mentions.slice(0, 10).map(m => m.mention),
+                        datasets: [{
+                            label: 'Count',
+                            data: currentTrending.mentions.slice(0, 10).map(m => m.count),
+                            backgroundColor: '#36b9cc'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {legend: {display: false}}
+                    }
+                });
+            }
+
+            // Keywords
+            if (currentTrending.keywords && currentTrending.keywords.length > 0) {
+                const ctx = document.getElementById('keywordsChart');
+                if (charts.keywords) charts.keywords.destroy();
+
+                charts.keywords = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: currentTrending.keywords.slice(0, 10).map(k => k.keyword),
+                        datasets: [{
+                            label: 'Frequency',
+                            data: currentTrending.keywords.slice(0, 10).map(k => k.count),
+                            backgroundColor: '#f6c23e'
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        plugins: {legend: {display: false}}
+                    }
+                });
+            }
+        }
+
+        // Display Posts
+        function displayPosts() {
+            const container = document.getElementById('postsContainer');
+            const filter = document.getElementById('postFilter').value;
+            
+            let posts = currentData;
+            if (filter !== 'All') {
+                posts = posts.filter(p => p.sentiment === filter);
+            }
+
+            if (posts.length === 0) {
+                container.innerHTML = '<div class="alert alert-info">No posts to display</div>';
+                return;
+            }
+
+            let html = '<div class="row">';
+            posts.slice(0, 50).forEach(post => {
+                const sentimentClass = post.sentiment.toLowerCase();
+                const sentimentBadge = `sentiment-${sentimentClass}`;
+                const emoji = post.sentiment === 'Positive' ? '😊' : post.sentiment === 'Negative' ? '😞' : '😐';
+
+                html += `
+                    <div class="col-md-12 mb-3">
+                        <div class="post-card ${sentimentClass}">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <div>
+                                    <strong>${post.author}</strong>
+                                    <span class="badge bg-secondary ms-2">${post.platform}</span>
+                                </div>
+                                <span class="sentiment-badge ${sentimentBadge}">${emoji} ${post.sentiment} (${post.polarity.toFixed(2)})</span>
+                            </div>
+                            <p class="mb-2">${post.text}</p>
+                            <small class="text-muted">
+                                <i class="far fa-clock"></i> ${new Date(post.timestamp).toLocaleString()}
+                                ${post.likes > 0 ? `| <i class="far fa-heart"></i> ${post.likes}` : ''}
+                                ${post.retweets > 0 ? `| <i class="fas fa-retweet"></i> ${post.retweets}` : ''}
+                            </small>
+                            ${post.hashtags && post.hashtags.length > 0 ? `<div class="mt-2"><small><i class="fas fa-hashtag"></i> ${post.hashtags.join(' ')}</small></div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+
+            if (posts.length > 50) {
+                html += `<div class="alert alert-info">Showing first 50 of ${posts.length} posts</div>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // Filter Posts
+        function filterPosts() {
+            displayPosts();
+        }
+
+        // Generate Word Cloud
+        async function generateWordCloud(sentiment) {
+            document.getElementById('wordcloudLoading').style.display = 'block';
+            document.getElementById('wordcloudImage').style.display = 'none';
+
+            try {
+                const response = await fetch('/api/wordcloud', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        data: currentData,
+                        sentiment_filter: sentiment
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('wordcloudImage').src = result.image;
+                    document.getElementById('wordcloudImage').style.display = 'block';
+                } else {
+                    showAlert('warning', '⚠️ Could not generate word cloud: ' + result.error);
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error generating word cloud: ' + error.message);
+            } finally {
+                document.getElementById('wordcloudLoading').style.display = 'none';
+            }
+        }
+
+        // Generate Insights
+        async function generateInsights() {
+            const container = document.getElementById('insightsContent');
+            container.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Generating AI insights...</p>
+                </div>
+            `;
+
+            try {
+                const response = await fetch('/api/insights', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({data: currentData})
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    container.innerHTML = `
+                        <div class="insights-box">
+                            <h4><i class="fas fa-magic"></i> AI-Generated Insights</h4>
+                            <div style="white-space: pre-line;">${result.insights}</div>
+                        </div>
+                    `;
+                } else {
+                    showAlert('danger', '❌ Error generating insights');
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error: ' + error.message);
+                container.innerHTML = '';
+            }
+        }
+
+        // Export Data
+        async function exportData() {
+            try {
+                const response = await fetch('/api/export', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({data: currentData})
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    // Create download link
+                    const blob = new Blob([result.csv], {type: 'text/csv'});
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `sentiment_analysis_${Date.now()}.csv`;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+
+                    showAlert('success', '✅ Data exported successfully!');
+                } else {
+                    showAlert('danger', '❌ Error exporting data');
+                }
+            } catch (error) {
+                showAlert('danger', '❌ Error: ' + error.message);
+            }
+        }
+
+        // Recalculate Metrics
+        function recalculateMetrics() {
+            const total = currentData.length;
+            const positive = currentData.filter(p => p.sentiment === 'Positive').length;
+            const negative = currentData.filter(p => p.sentiment === 'Negative').length;
+            const neutral = currentData.filter(p => p.sentiment === 'Neutral').length;
+            const avgPol = currentData.reduce((sum, p) => sum + p.polarity, 0) / total;
+            const engagement = currentData.reduce((sum, p) => sum + (p.likes || 0) + (p.retweets || 0), 0);
+
+            currentMetrics = {
+                total_posts: total,
+                positive_count: positive,
+                negative_count: negative,
+                neutral_count: neutral,
+                positive_pct: ((positive / total) * 100).toFixed(1),
+                negative_pct: ((negative / total) * 100).toFixed(1),
+                neutral_pct: ((neutral / total) * 100).toFixed(1),
+                avg_polarity: avgPol.toFixed(3),
+                total_engagement: engagement
+            };
+
+            // Recalculate trending
+            const hashtags = {};
+            const mentions = {};
+            const keywords = {};
+
+            currentData.forEach(post => {
+                post.hashtags.forEach(h => hashtags[h] = (hashtags[h] || 0) + 1);
+                post.mentions.forEach(m => mentions[m] = (mentions[m] || 0) + 1);
+                post.keywords.forEach(k => keywords[k] = (keywords[k] || 0) + 1);
+            });
+
+            currentTrending = {
+                hashtags: Object.entries(hashtags).map(([tag, count]) => ({tag, count})).sort((a, b) => b.count - a.count),
+                mentions: Object.entries(mentions).map(([mention, count]) => ({mention, count})).sort((a, b) => b.count - a.count),
+                keywords: Object.entries(keywords).map(([keyword, count]) => ({keyword, count})).sort((a, b) => b.count - a.count)
+            };
+        }
+
+        // Show Alert
+        function showAlert(type, message, autoHide = true) {
+            const container = document.getElementById('alertContainer');
+            const alertId = 'alert-' + Date.now();
+            
+            const alertHTML = `
+                <div id="${alertId}" class="alert alert-${type} alert-dismissible fade show" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            
+            container.innerHTML = alertHTML;
+
+            if (autoHide) {
+                setTimeout(() => {
+                    const alert = document.getElementById(alertId);
+                    if (alert) {
+                        alert.remove();
+                    }
+                }, 5000);
+            }
+        }
+
+        // Show Loading
+        function showLoading(show) {
+            const spinner = document.getElementById('loadingSpinner');
+            if (show) {
+                spinner.classList.add('active');
+            } else {
+                spinner.classList.remove('active');
+            }
+        }
+
+        // Initialize with sample data on page load
+        window.addEventListener('load', function() {
+            console.log('🚀 Social Media Sentiment Tracker loaded');
+            console.log('Ready to analyze sentiment data!');
+        });
+    </script>
+</body>
+</html>

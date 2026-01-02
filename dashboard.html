@@ -3,625 +3,649 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twin Innovators</title>
+    <title>AI CRM Agent - Lead Intelligence Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }.header-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.header-btn {
-  background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-  border: none;
-  color: white;
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  border-radius: 25px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-.header-btn:hover {
-  background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
-}
-
-.header-btn:active {
-  transform: scale(0.97);
-}
-
-.header-btn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.4);
-}
-
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
         }
-
-        body.light-mode {
-            background: linear-gradient(135deg, #f0f4ff 0%, #e8eeff 100%);
-            color: #1a202c;
-        }
-
-        body.dark-mode {
-            background: #111827;
-            color: #f9fafb;
-        }
-
-        /* Header */
-        header {
-            background: rgba(226, 227, 232, 0.073);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            transition: background-color 0.3s ease;
-        }
-
-        body.dark-mode header {
-            background: #1f2937;
-            border-bottom: 1px solid #374151;
-        }
-
-        .header-content {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-logo {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header-logo svg {
-            width: 24px;
-            height: 24px;
-            stroke: white;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .icon-btn {
-            width: 40px;
-            height: 40px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            background: #f3f4f6;
-        }
-
-        body.dark-mode .icon-btn {
-            background: #374151;
-        }
-
-        .icon-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .icon-btn svg {
-            width: 20px;
-            height: 20px;
-            stroke: #374151;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        body.dark-mode .icon-btn svg {
-            stroke: #f9fafb;
-        }
-
-        .user-badge {
-            padding: 10px 20px;
-            background: #f3f4f6;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-
-        body.dark-mode .user-badge {
-            background: #374151;
-        }
-
-        /* Settings Panel */
-        .settings-panel {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 16px 24px;
-            display: none;
-        }
-
-        .settings-panel.active {
-            display: block;
-        }
-
-        .settings-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        body.dark-mode .settings-card {
-            background: #0e3162;
-            border: 1px solid #374151;
-        }
-
-        .settings-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-        }
-
-        .setting-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .setting-group select {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e5e7eb;
-            border-radius: 10px;
-            font-size: 15px;
-            cursor: pointer;
-            background: #f9fafb;
-            transition: all 0.3s ease;
-        }
-
-        body.dark-mode .setting-group select {
-            background: #2463c8;
-            border-color: #4b5563;
-            color: #f9fafb;
-        }
-
-        .setting-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        /* Main Content */
-        main {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 32px 24px;
-        }
-
-        .welcome-section {
-            margin-bottom: 32px;
-        }
-
-        .welcome-title {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .welcome-subtitle {
-            color: #6b7280;
-            font-size: 16px;
-        }
-
-        body.dark-mode .welcome-subtitle {
-            color: #9ca3af;
-        }
-
-        /* Module Grid */
-        .modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 24px;
-            margin-bottom: 32px;
-        }
-
-        .module-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        body.dark-mode .module-card {
-            background: #082651;
-            border: 1px solid #374151;
-        }
-
-        .module-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .module-header {
-            padding: 24px;
-            color: white;
-        }
-
-        .module-icon {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 8px;
-        }
-
-        .module-icon svg {
-            width: 100%;
-            height: 100%;
-            stroke: white;
-            fill: none;
-            stroke-width: 2;
-        }
-
-        .module-body {
-            padding: 24px;
-        }
-
-        .module-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .module-description {
-            color: #6b7280;
-            font-size: 14px;
-            line-height: 1.5;
-            margin-bottom: 16px;
-        }
-
-        body.dark-mode .module-description {
-            color: #9ca3af;
-        }
-
-        .module-btn {
-            padding: 10px 24px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .module-btn:hover {
-            opacity: 0.9;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 24px;
-        }
-
-        .stat-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        body.dark-mode .stat-card {
-            background: hwb(215 6% 53%);
-            border: 1px solid #374151;
-        }
-
-        .stat-label {
-            color: #6b7280;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        body.dark-mode .stat-label {
-            color: #9ca3af;
-        }
-
-        .stat-value {
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        /* Gradients */
-        .gradient-blue { background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); }
-        .gradient-purple { background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%); }
-        .gradient-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .gradient-orange { background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); }
-        .gradient-yellow { background: linear-gradient(135deg, #eab308 0%, #f59e0b 100%); }
-        .gradient-indigo { background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%); }
-
-        @media (max-width: 768px) {
-            .modules-grid, .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-title {
-                font-size: 18px;
-            }
-
-            .welcome-title {
-                font-size: 24px;
-            }
-            .gradient-text {
-                font-weight: 700;
-                font-size: 28px;
-                background: linear-gradient(90deg, #00ffd5, #00d0ff, #0077ff);
-                
-                -webkit-text-fill-color: transparent;
-                letter-spacing: 1px;
-}
-        }
+        .hot-lead { animation: pulse-glow 2s infinite; }
+        .gradient-bg { background: linear-gradient(135deg, #1b1e2c 0%, hsl(270, 73%, 12%) 100%); }
+        .card-hover:hover { transform: translateY(-4px); transition: all 0.3s; }
     </style>
 </head>
-<body class="light-mode">
-    
+<body class="bg-gray-50">
     <!-- Header -->
-    <header>
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="header-logo">
-                    <svg viewBox="0 0 24 24">
-                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                    </svg>
+    <header class="gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-white rounded-lg flex items-center justify-center">
+                        <span class="text-2xl">🤖</span>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold">AI CRM Agent</h1>
+                        <p class="text-sm text-blue-200">Lead Intelligence Dashboard</p>
+                    </div>
                 </div>
-                <h1 class="gradient-text">Twin Innovators</h1>
-            </div><div class="header-actions">
-  <button class="header-btn" onclick="window.location.href='http://localhost:9000';">
-    Poster Creator
+                <div class="flex items-center space-x-4">
+                    <div class="text-right">
+                        <p class="text-sm text-blue-200">Last Updated</p>
+                        <p class="font-semibold" id="lastUpdate">Loading...</p>
+                    </div>  <button class="header-btn" onclick="window.location.href='https://public.tableau.com/app/profile/abi.krishnnan.r.m/viz/infynd/B2BIndustryPerformanceEngagementDashboard;'">
+Tableu Public
   </button>
-  <button class="header-btn" onclick="window.location.href='http://localhost:5010';">
-    Meta
-  </button>
-</div>
-
-            
-            <div class="header-controls">
-                <button class="icon-btn" onclick="toggleTheme()" id="themeBtn">
-                    <svg id="themeIcon" viewBox="0 0 24 24">
-                        <circle cx="12" cy="12" r="5"></circle>
-                        <line x1="12" y1="1" x2="12" y2="3"></line>
-                        <line x1="12" y1="21" x2="12" y2="23"></line>
-                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                        <line x1="1" y1="12" x2="3" y2="12"></line>
-                        <line x1="21" y1="12" x2="23" y2="12"></line>
-                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-                    </svg>
-                </button>
-                
-                <div class="user-badge">
-                    <span>👤 <span id="usernameDisplay">User</span></span>
+                    <button onclick="refreshData()" class="bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-blue-50 transition">
+                        🔄 Refresh
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-
-
-    <!-- Main Content -->
-    <main>
-        <div class="welcome-section">
-            <h2 class="welcome-title">Welcome back, <span id="welcomeUser">User</span>!</h2>
-            <p class="welcome-subtitle">Select a module to get started with AI-powered marketing tools</p>
-        </div>
-
-        <!-- Modules Grid -->
-        <div class="modules-grid">
-            <div class="module-card">
-                <div class="module-header gradient-blue">
-                    <div class="module-icon">
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-                            <polyline points="17 6 23 6 23 12"></polyline>
-                        </svg>
+    <div class="container mx-auto px-6 py-8">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-semibold">Total Leads</p>
+                        <p class="text-3xl font-bold text-gray-800 mt-2" id="totalLeads">-</p>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">📊</span>
                     </div>
                 </div>
-<div class="module-body">
-  <h3 class="module-title">Social Media Sentiment Tracker</h3>
-  <p class="module-description">Analyze and track sentiment across social platforms</p>
-  <button class="module-btn gradient-blue" onclick="window.location.href='http://localhost:5000';">
-    Open Module
-  </button>
-</div>
-
-            </div>
-
-            <div class="module-card">
-                <div class="module-header gradient-purple">
-                    <div class="module-icon">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <path d="M12 16v-4m0-4h.01"></path>
-                        </svg>
-                    </div>
-                </div>
-                <div class="module-body">
-                    <h3 class="module-title">Smart Lead Scorer</h3>
-                    <p class="module-description">AI-powered lead qualification and scoring</p>
-                    <button class="module-btn gradient-purple" onclick="window.location.href='http://localhost:5002';">Open Module</button>
+                <div class="mt-4 flex items-center text-sm">
+                    <span class="text-green-600 font-semibold">↑ 12%</span>
+                    <span class="text-gray-500 ml-2">from last month</span>
                 </div>
             </div>
 
-            <div class="module-card">
-                <div class="module-header gradient-green">
-                    <div class="module-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover hot-lead">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-semibold">Hot Leads</p>
+                        <p class="text-3xl font-bold text-red-600 mt-2" id="hotLeads">-</p>
+                    </div>
+                    <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">🔥</span>
                     </div>
                 </div>
-                <div class="module-body">
-                    <h3 class="module-title">Marketing Insights Chatbot</h3>
-                    <p class="module-description">Conversational AI for marketing analytics</p>
-                <button class="module-btn gradient-green" onclick="window.location.href='chatbotfinal.html';">
-  Open Module
-</button>
-
+                <div class="mt-4 flex items-center text-sm">
+                    <span class="text-red-600 font-semibold">URGENT</span>
+                    <span class="text-gray-500 ml-2">Immediate action</span>
                 </div>
             </div>
 
-            <div class="module-card">
-                <div class="module-header gradient-orange">
-                    <div class="module-icon">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                            <polyline points="10 9 9 9 8 9"></polyline>
-                        </svg>
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-semibold">Avg Score</p>
+                        <p class="text-3xl font-bold text-purple-600 mt-2" id="avgScore">-</p>
+                    </div>
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">⭐</span>
                     </div>
                 </div>
-                <div class="module-body">
-                    <h3 class="module-title">Content Recommendation Engine</h3>
-                    <p class="module-description">Personalized content suggestions for your audience</p>
-                    <button class="module-btn gradient-orange" onclick="window.location.href='http://localhost:5004';">Open Module</button>
+                <div class="mt-4 flex items-center text-sm">
+                    <span class="text-purple-600 font-semibold">AI-Powered</span>
+                    <span class="text-gray-500 ml-2">ML scoring</span>
                 </div>
             </div>
 
-            <div class="module-card">
-                <div class="module-header gradient-yellow">
-                    <div class="module-icon">
-                        <svg viewBox="0 0 24 24">
-                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                        </svg>
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-semibold">Conv. Rate</p>
+                        <p class="text-3xl font-bold text-green-600 mt-2" id="convRate">-</p>
+                    </div>
+                    <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <span class="text-2xl">💰</span>
                     </div>
                 </div>
-                <div class="module-body">
-                    <h3 class="module-title">Personalized Campaign Generator</h3>
-                    <p class="module-description">Create tailored marketing campaigns with AI</p>
-                    <button class="module-btn gradient-yellow" onclick="window.location.href='http://localhost:5005';">Open Module</button>
-                </div>
-            </div>
-
-            <div class="module-card">
-                <div class="module-header gradient-indigo">
-                    <div class="module-icon">
-                        <svg viewBox="0 0 24 24">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                        </svg>
-                    </div>
-                </div>
-                <div class="module-body">
-                    <h3 class="module-title">Digital Twin Dashboard</h3>
-                    <p class="module-description">Comprehensive analytics and performance metrics</p>
-                    <button class="module-btn gradient-indigo"  onclick="window.location.href='http://localhost:5006';">Open Module</button>
+                <div class="mt-4 flex items-center text-sm">
+                    <span class="text-green-600 font-semibold">↑ 8%</span>
+                    <span class="text-gray-500 ml-2">improvement</span>
                 </div>
             </div>
         </div>
 
-    </main>
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Charts Column -->
+            <div class="lg:col-span-2 space-y-8">
+                <!-- Score Distribution Chart -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Lead Score Distribution</h2>
+                    <canvas id="scoreDistChart" height="80"></canvas>
+                </div>
+
+                <!-- Regional Performance -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Regional Performance</h2>
+                    <canvas id="regionalChart" height="80"></canvas>
+                </div>
+
+                <!-- Industry Analysis -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Top Industries by Score</h2>
+                    <canvas id="industryChart" height="80"></canvas>
+                </div>
+            </div>
+
+            <!-- Top Leads Column -->
+            <div class="space-y-8">
+                <!-- Search -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Search Leads</h2>
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        placeholder="Search by email or ID..."
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                        onkeyup="searchLeads()"
+                    >
+                    <div id="searchResults" class="mt-4 space-y-2 max-h-64 overflow-y-auto"></div>
+                </div>
+
+                <!-- Top Leads -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">🏆 Top 10 Leads</h2>
+                    <div id="topLeadsList" class="space-y-3 max-h-96 overflow-y-auto">
+                        <div class="text-center text-gray-500 py-4">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Model Info -->
+                <div class="bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl shadow-lg p-6 text-white">
+                    <h2 class="text-xl font-bold mb-4">🤖 AI Model Info</h2>
+                    <div id="modelInfo" class="space-y-2 text-sm">
+                        <div class="flex justify-between">
+                            <span class="text-purple-200">Model Type:</span>
+                            <span class="font-semibold">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-purple-200">ROC-AUC:</span>
+                            <span class="font-semibold">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-purple-200">Training Time:</span>
+                            <span class="font-semibold">-</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-purple-200">Samples:</span>
+                            <span class="font-semibold">-</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- All Leads Table -->
+        <div class="bg-white rounded-xl shadow-lg p-6 mt-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-gray-800">All Leads</h2>
+                <div class="flex space-x-2">
+                    <select id="sortSelect" onchange="loadLeads()" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500">
+                        <option value="Lead_Score">Sort by Score</option>
+                        <option value="Days_Since_Last_Activity">Sort by Activity</option>
+                        <option value="Engagement_Score">Sort by Engagement</option>
+                    </select>
+                    <button onclick="exportData()" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition">
+                        📥 Export
+                    </button>
+                </div>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-50 border-b border-gray-200">
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Lead ID</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Email</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Score</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Priority</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Industry</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Company Size</th>
+                            <th class="px-4 py-3 text-left text-xs font-semibold text-gray-600 uppercase">Last Activity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leadsTable">
+                        <tr>
+                            <td colspan="7" class="px-4 py-8 text-center text-gray-500">Loading leads...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="flex items-center justify-between mt-6">
+                <div class="text-sm text-gray-600">
+                    Showing <span id="showingStart">0</span> to <span id="showingEnd">0</span> of <span id="totalCount">0</span> leads
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="previousPage()" id="prevBtn" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition disabled:opacity-50">
+                        Previous
+                    </button>
+                    <span id="pageInfo" class="px-4 py-2 font-semibold">Page 1</span>
+                    <button onclick="nextPage()" id="nextBtn" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition disabled:opacity-50">
+                        Next
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Check if user is logged in
-        const username = sessionStorage.getItem('username');
-        if (!username) {
-            window.location.href = 'login.html';
-        } else {
-            document.getElementById('usernameDisplay').textContent = username;
-            document.getElementById('welcomeUser').textContent = username;
-        }
+        // Global variables
+        let currentPage = 1;
+        let totalLeads = 0;
+        let charts = {};
+        let searchTimeout = null;
 
-        // Theme Management
-        let currentTheme = localStorage.getItem('theme') || 'light';
-        applyTheme(currentTheme);
-
-        function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            applyTheme(currentTheme);
-            document.getElementById('themeSelect').value = currentTheme;
-        }
-
-        function changeTheme(theme) {
-            currentTheme = theme;
-            applyTheme(theme);
-        }
-
-        function applyTheme(theme) {
-            document.body.className = theme + '-mode';
-            localStorage.setItem('theme', theme);
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStats();
+            loadTopLeads();
+            loadLeads();
+            loadCharts();
+            loadModelInfo();
+            updateLastUpdate();
             
-            const themeIcon = document.getElementById('themeIcon');
-            if (theme === 'dark') {
-                themeIcon.innerHTML = '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
-            } else {
-                themeIcon.innerHTML = '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>';
+            // Auto-refresh every 5 minutes
+            setInterval(refreshData, 300000);
+        });
+
+        // Update last update time
+        function updateLastUpdate() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = now.toLocaleTimeString();
+        }
+
+        // Load statistics
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('totalLeads').textContent = data.total_leads.toLocaleString();
+                document.getElementById('hotLeads').textContent = data.hot_leads.toLocaleString();
+                document.getElementById('avgScore').textContent = data.avg_score.toFixed(1);
+                document.getElementById('convRate').textContent = data.conversion_rate.toFixed(1) + '%';
+            } catch (error) {
+                console.error('Error loading stats:', error);
             }
         }
 
-        // Settings Panel Toggle
-        function toggleSettings() {
-            const panel = document.getElementById('settingsPanel');
-            panel.classList.toggle('active');
+        // Load top leads
+        async function loadTopLeads() {
+            try {
+                const response = await fetch('/api/top-leads?limit=10');
+                const data = await response.json();
+                
+                const container = document.getElementById('topLeadsList');
+                container.innerHTML = '';
+                
+                data.top_leads.forEach((lead, index) => {
+                    const priorityColor = {
+                        'HOT': 'bg-red-100 text-red-700 border-red-300',
+                        'WARM': 'bg-orange-100 text-orange-700 border-orange-300',
+                        'COOL': 'bg-blue-100 text-blue-700 border-blue-300',
+                        'COLD': 'bg-gray-100 text-gray-700 border-gray-300'
+                    }[lead.Priority];
+                    
+                    const isHot = lead.Priority === 'HOT';
+                    
+                    container.innerHTML += `
+                        <div class="border-2 ${priorityColor} rounded-lg p-3 hover:shadow-md transition ${isHot ? 'hot-lead' : ''}">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-bold text-lg">#${index + 1}</span>
+                                <span class="text-2xl font-bold">${lead.Lead_Score}</span>
+                            </div>
+                            <div class="text-sm">
+                                <div class="font-semibold truncate">${lead.Email}</div>
+                                <div class="text-xs text-gray-600 mt-1">${lead.Industry} • ${lead.Company_Size}</div>
+                                <div class="flex items-center justify-between mt-2">
+                                    <span class="text-xs font-semibold px-2 py-1 rounded ${priorityColor}">
+                                        ${lead.Priority}
+                                    </span>
+                                    <span class="text-xs text-gray-500">Engagement: ${lead.Engagement_Score}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error('Error loading top leads:', error);
+            }
         }
 
-        // Language Management
+        // Load leads table
+        async function loadLeads() {
+            try {
+                const sortBy = document.getElementById('sortSelect').value;
+                const response = await fetch(`/api/leads?page=${currentPage}&per_page=20&sort=${sortBy}`);
+                const data = await response.json();
+                
+                totalLeads = data.total;
+                const tbody = document.getElementById('leadsTable');
+                tbody.innerHTML = '';
+                
+                data.leads.forEach(lead => {
+                    const priorityColors = {
+                        'HOT': 'bg-red-100 text-red-700',
+                        'WARM': 'bg-orange-100 text-orange-700',
+                        'COOL': 'bg-blue-100 text-blue-700',
+                        'COLD': 'bg-gray-100 text-gray-700'
+                    };
+                    
+                    tbody.innerHTML += `
+                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                            <td class="px-4 py-3 text-sm font-mono">${lead.Lead_ID}</td>
+                            <td class="px-4 py-3 text-sm">${lead.Email}</td>
+                            <td class="px-4 py-3">
+                                <span class="text-lg font-bold text-purple-600">${lead.Lead_Score}</span>
+                            </td>
+                            <td class="px-4 py-3">
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold ${priorityColors[lead.Priority]}">
+                                    ${lead.Priority}
+                                </span>
+                            </td>
+                            <td class="px-4 py-3 text-sm">${lead.Industry}</td>
+                            <td class="px-4 py-3 text-sm">${lead.Company_Size}</td>
+                            <td class="px-4 py-3 text-sm text-gray-600">${lead.Days_Since_Last_Activity}d ago</td>
+                        </tr>
+                    `;
+                });
+                
+                // Update pagination
+                const start = (currentPage - 1) * 20 + 1;
+                const end = Math.min(currentPage * 20, totalLeads);
+                document.getElementById('showingStart').textContent = start;
+                document.getElementById('showingEnd').textContent = end;
+                document.getElementById('totalCount').textContent = totalLeads;
+                document.getElementById('pageInfo').textContent = `Page ${currentPage}`;
+                
+                // Update buttons
+                document.getElementById('prevBtn').disabled = currentPage === 1;
+                document.getElementById('nextBtn').disabled = end >= totalLeads;
+            } catch (error) {
+                console.error('Error loading leads:', error);
+            }
+        }
 
-        // Module Click Handlers
-        document.querySelectorAll('.module-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.stopPropagation();
-                const moduleName = this.parentElement.querySelector('.module-title').textContent;
-                alert('Opening: ' + moduleName + '\n\nThis would redirect to the module page.');
-            });
-        });
+        // Load charts
+        async function loadCharts() {
+            await loadScoreDistribution();
+            await loadRegionalAnalysis();
+            await loadIndustryAnalysis();
+        }
 
-        document.querySelectorAll('.module-card').forEach(card => {
-            card.addEventListener('click', function() {
-                const moduleName = this.querySelector('.module-title').textContent;
-                alert('Opening: ' + moduleName + '\n\nThis would redirect to the module page.');
-            });
-        });
+        // Score distribution chart
+        async function loadScoreDistribution() {
+            try {
+                const response = await fetch('/api/score-distribution');
+                const data = await response.json();
+                
+                const ctx = document.getElementById('scoreDistChart').getContext('2d');
+                
+                if (charts.scoreDist) charts.scoreDist.destroy();
+                
+                charts.scoreDist = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.ranges,
+                        datasets: [{
+                            label: 'Number of Leads',
+                            data: data.counts,
+                            backgroundColor: [
+                                'rgba(156, 163, 175, 0.7)',
+                                'rgba(59, 130, 246, 0.7)',
+                                'rgba(251, 146, 60, 0.7)',
+                                'rgba(239, 68, 68, 0.7)'
+                            ],
+                            borderColor: [
+                                'rgb(156, 163, 175)',
+                                'rgb(59, 130, 246)',
+                                'rgb(251, 146, 60)',
+                                'rgb(239, 68, 68)'
+                            ],
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading score distribution:', error);
+            }
+        }
+
+        // Regional analysis chart
+        async function loadRegionalAnalysis() {
+            try {
+                const response = await fetch('/api/regional-analysis');
+                const data = await response.json();
+                
+                const ctx = document.getElementById('regionalChart').getContext('2d');
+                
+                if (charts.regional) charts.regional.destroy();
+                
+                charts.regional = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.map(d => d.region),
+                        datasets: [{
+                            label: 'Avg Score',
+                            data: data.map(d => d.avg_score),
+                            backgroundColor: 'rgba(147, 51, 234, 0.7)',
+                            borderColor: 'rgb(147, 51, 234)',
+                            borderWidth: 2
+                        }, {
+                            label: 'Lead Count',
+                            data: data.map(d => d.lead_count),
+                            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+                            borderColor: 'rgb(59, 130, 246)',
+                            borderWidth: 2,
+                            yAxisID: 'y1'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                position: 'left',
+                                title: { display: true, text: 'Average Score' }
+                            },
+                            y1: {
+                                beginAtZero: true,
+                                position: 'right',
+                                grid: { drawOnChartArea: false },
+                                title: { display: true, text: 'Lead Count' }
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading regional analysis:', error);
+            }
+        }
+
+        // Industry analysis chart
+        async function loadIndustryAnalysis() {
+            try {
+                const response = await fetch('/api/industry-analysis');
+                const data = await response.json();
+                
+                const top10 = data.slice(0, 10);
+                
+                const ctx = document.getElementById('industryChart').getContext('2d');
+                
+                if (charts.industry) charts.industry.destroy();
+                
+                charts.industry = new Chart(ctx, {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: top10.map(d => d.industry),
+                        datasets: [{
+                            label: 'Average Score',
+                            data: top10.map(d => d.avg_score),
+                            backgroundColor: 'rgba(16, 185, 129, 0.7)',
+                            borderColor: 'rgb(16, 185, 129)',
+                            borderWidth: 2
+                        }]
+                    },
+                    options: {
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        plugins: {
+                            legend: { display: false }
+                        },
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                max: 100
+                            }
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('Error loading industry analysis:', error);
+            }
+        }
+
+        // Load model info
+        async function loadModelInfo() {
+            try {
+                const response = await fetch('/api/model-info');
+                const data = await response.json();
+                
+                document.getElementById('modelInfo').innerHTML = `
+                    <div class="flex justify-between">
+                        <span class="text-purple-200">Model Type:</span>
+                        <span class="font-semibold">${data.model_type || 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-purple-200">ROC-AUC:</span>
+                        <span class="font-semibold">${data.roc_auc ? data.roc_auc.toFixed(4) : 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-purple-200">Training Time:</span>
+                        <span class="font-semibold">${data.training_time ? data.training_time.toFixed(2) + 's' : 'N/A'}</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-purple-200">Samples:</span>
+                        <span class="font-semibold">${data.train_samples || 0} train / ${data.test_samples || 0} test</span>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading model info:', error);
+            }
+        }
+
+        // Search leads
+        function searchLeads() {
+            clearTimeout(searchTimeout);
+            
+            searchTimeout = setTimeout(async () => {
+                const query = document.getElementById('searchInput').value;
+                
+                if (query.length < 2) {
+                    document.getElementById('searchResults').innerHTML = '';
+                    return;
+                }
+                
+                try {
+                    const response = await fetch(`/api/search-leads?q=${encodeURIComponent(query)}`);
+                    const data = await response.json();
+                    
+                    const container = document.getElementById('searchResults');
+                    
+                    if (data.results.length === 0) {
+                        container.innerHTML = '<div class="text-sm text-gray-500 text-center py-2">No results found</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = '';
+                    data.results.forEach(lead => {
+                        const priorityColors = {
+                            'HOT': 'bg-red-100 text-red-700',
+                            'WARM': 'bg-orange-100 text-orange-700',
+                            'COOL': 'bg-blue-100 text-blue-700',
+                            'COLD': 'bg-gray-100 text-gray-700'
+                        };
+                        
+                        container.innerHTML += `
+                            <div class="border border-gray-200 rounded-lg p-3 hover:bg-gray-50 transition">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex-1 min-w-0">
+                                        <div class="text-sm font-semibold truncate">${lead.Email}</div>
+                                        <div class="text-xs text-gray-500">${lead.Industry}</div>
+                                    </div>
+                                    <div class="ml-3 flex items-center space-x-2">
+                                        <span class="text-lg font-bold text-purple-600">${lead.Lead_Score}</span>
+                                        <span class="px-2 py-1 rounded text-xs font-semibold ${priorityColors[lead.Priority]}">
+                                            ${lead.Priority}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                } catch (error) {
+                    console.error('Error searching leads:', error);
+                }
+            }, 300);
+        }
+
+        // Pagination
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                loadLeads();
+            }
+        }
+
+        function nextPage() {
+            const maxPage = Math.ceil(totalLeads / 20);
+            if (currentPage < maxPage) {
+                currentPage++;
+                loadLeads();
+            }
+        }
+
+        // Refresh all data
+        function refreshData() {
+            loadStats();
+            loadTopLeads();
+            loadLeads();
+            loadCharts();
+            loadModelInfo();
+            updateLastUpdate();
+        }
+
+        // Export data
+        function exportData() {
+            window.open('/api/download-report', '_blank');
+        }
     </script>
 </body>
 </html>

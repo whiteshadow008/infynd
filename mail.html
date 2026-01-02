@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Financial Assistant Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300,400,500,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> <!-- For Material Icons -->
+    <style>
+        :root {
+            --bg-dark: #1a1a2e; /* Deep dark blue */
+            --card-bg: #1e2538; /* Slightly lighter card background */
+            --text-light: #e0e0e0; /* Light gray text */
+            --text-medium: #a0a0a0; /* Medium gray text */
+            --accent-green: #2ecc71; /* Green accent for success/buttons */
+            --accent-blue: #3498db; /* Blue accent for links/active states */
+            --accent-red: #e74c3c; /* Red accent for errors/warnings */
+            --border-color: #303d52; /* Darker border for separation */
+            --header-height: 70px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            display: flex; /* Use flexbox for body to handle sidebar if added later */
+            min-height: 100vh;
+        }
+
+        .dashboard-container {
+            flex-grow: 1; /* Allows it to take up available space */
+            display: flex;
+            flex-direction: column;
+            padding: 0px 20px 20px 20px; /* Adjust left padding for main content */
+            max-width: 100%; /* Ensure it doesn't overflow */
+        }
+
+        /* Top Header */
+        .top-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            height: var(--header-height);
+        }
+
+        .app-title {
+            font-size: 1.6em;
+            font-weight: 700;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-title .material-icons {
+            font-size: 1.2em;
+            color: var(--accent-blue);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            background-color: var(--card-bg);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .header-btn:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            border-color: var(--accent-blue);
+        }
+
+        .header-btn.new-campaign {
+            background-color: var(--accent-green);
+            border-color: var(--accent-green);
+            font-weight: 500;
+        }
+
+        .header-btn.new-campaign:hover {
+            background-color: #27ae60;
+            border-color: #27ae60;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 100px;
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-card .label {
+            font-size: 0.95em;
+            color: var(--text-medium);
+            margin-bottom: 8px;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: 700;
+            color: var(--accent-green); /* Example: green for positive metrics */
+        }
+
+        /* Specific value colors */
+        .stat-card.total-wealth .value { color: var(--accent-green); }
+        .stat-card.active-goals .value { color: var(--accent-blue); }
+        .stat-card.avg-savings .value { color: #f39c12; } /* Orange */
+        .stat-card.portfolio-roi .value { color: #8e44ad; } /* Purple */
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+            overflow-x: auto; /* Allow scrolling on small screens */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .tab-item {
+            padding: 12px 20px;
+            color: var(--text-medium);
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: color 0.2s ease, border-bottom 0.2s ease;
+            border-bottom: 2px solid transparent;
+            white-space: nowrap; /* Prevent wrapping */
+        }
+
+        .tab-item:hover {
+            color: var(--text-light);
+        }
+
+        .tab-item.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        /* Main Content Area */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+
+        .section-header .action-btn {
+            background-color: var(--card-bg);
+            color: var(--text-medium);
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: background-color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .section-header .action-btn:hover {
+            background-color: rgba(255, 255, 255, 0.08);
+            color: var(--text-light);
+        }
+
+        /* Domain Cards Grid */
+        .domain-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .domain-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 140px;
+        }
+
+        .domain-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent-blue);
+        }
+
+        .domain-card h3 {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .domain-card .description {
+            font-size: 0.9em;
+            color: var(--text-medium);
+            margin-bottom: 15px;
+            flex-grow: 1; /* Allows description to take up available space */
+        }
+
+        .domain-card .status-tag {
+            background-color: var(--accent-green);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 0.75em;
+            font-weight: 500;
+            text-transform: uppercase;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .domain-card .status-tag.ready {
+            background-color: #f39c12; /* Orange for ready */
+        }
+        .domain-card .status-tag.sent {
+            background-color: var(--accent-green); /* Green for sent */
+        }
+
+        .domain-card .action-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--accent-blue);
+            font-size: 0.9em;
+            text-decoration: none;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .domain-card .action-link .material-icons {
+            font-size: 1em;
+            margin-right: 5px;
+        }
+
+        /* Personalized Content Display */
+        #personalizedContentSection {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid var(--border-color);
+            margin-top: 30px;
+            display: none; /* Hidden by default */
+        }
+
+        #personalizedContentSection.active {
+            display: block;
+        }
+
+        #personalizedContentSection h2 {
+            font-size: 1.8em;
+            color: var(--text-light);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        #personalizedContentSection .short-description {
+            font-size: 1.1em;
+            color: var(--text-medium);
+            margin-bottom: 20px;
+        }
+
+        #personalizedContentSection .meta-info {
+            font-size: 0.95em;
+            color: var(--text-medium);
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+            margin-top: 20px;
+        }
+
+        #personalizedContentSection .meta-info strong {
+            color: var(--text-light);
+        }
+
+        .email-status {
+            margin-top: 15px;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .email-status.success {
+            background-color: rgba(46, 204, 113, 0.1); /* Green light bg */
+            color: var(--accent-green);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+        }
+
+        .email-status.failed {
+            background-color: rgba(231, 76, 60, 0.1); /* Red light bg */
+            color: var(--accent-red);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .error-message {
+            color: var(--accent-red);
+            background-color: rgba(231, 76, 60, 0.1);
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            padding: 12px 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 0.95em;
+            font-weight: 500;
+            display: none;
+        }
+
+        .error-message.active {
+            display: block;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 12px;
+            z-index: 10;
+            flex-direction: column;
+            gap: 15px;
+            display: none; /* Hidden by default */
+        }
+
+        .loading-overlay.active {
+            display: flex;
+        }
+
+        .loading-spinner-large {
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-top: 5px solid var(--accent-blue);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        /* Chart-specific styles (for engagement dashboard) */
+        .engagement-dashboard-card {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px; /* Added margin for separation */
+        }
+
+        .engagement-dashboard-card h2 {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+
+        .engagement-dashboard-card .chart-container {
+            height: 250px; /* Fixed height for the chart */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .engagement-dashboard-card .chart-info {
+            font-size: 0.85em;
+            color: var(--text-medium);
+            text-align: center;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 900px) {
+            .stats-grid, .domain-cards-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            }
+        }
+
+        @media (max-width: 600px) {
+            .top-header {
+                flex-direction: column;
+                align-items: flex-start;
+                height: auto;
+                padding-bottom: 15px;
+            }
+            .header-actions {
+                margin-top: 15px;
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .header-btn {
+                flex-grow: 1;
+                justify-content: center;
+            }
+            .dashboard-container {
+                padding: 15px;
+            }
+            .stats-grid, .domain-cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .app-title {
+                font-size: 1.4em;
+            }
+            .stat-card .value {
+                font-size: 1.8em;
+            }
+            .tab-item {
+                padding: 10px 15px;
+                font-size: 0.9em;
+            }
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            .section-header .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Keyframe for spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Top Header -->
+        <div class="top-header">
+            <div class="app-title">
+                <span class="material-icons">bar_chart</span> AI FINANCIAL DASHBOARD
+            </div>
+        </div>
+
+        
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav">
+            <div class="tab-item active" data-tab="domains">Financial Domains</div>
+            <div class="tab-item" data-tab="recommendations">Recommendations</div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Tab Content: Financial Domains (Active by default) -->
+            <div id="tab-domains" class="tab-content active">
+                <div class="section-header">
+                    <h2>Explore Financial Domains</h2>
+                    <button class="action-btn"><span class="material-icons">refresh</span> Refresh</button>
+                </div>
+                <div class="domain-cards-grid" id="domainCardsContainer">
+                    <!-- Domain cards will be generated here -->
+                    <div class="domain-card" data-domain="Investing">
+                        <span class="status-tag ready">Ready</span>
+                        <h3>Investing</h3>
+                        <p class="description">Explore diverse strategies for stocks, bonds, mutual funds, and real estate to grow your wealth over time.</p>
+                        <a href="#" class="action-link"><span class="material-icons">visibility</span> Preview & Get Content</a>
+                    </div>
+                    <div class="domain-card" data-domain="Crypto">
+                        <span class="status-tag sent">Viewed</span>
+                        <h3>Cryptocurrencies</h3>
+                        <p class="description">Dive into the world of digital assets, blockchain technology, and decentralized finance, exploring both opportunities and risks.</p>
+                        <a href="#" class="action-link"><span class="material-icons">visibility</span> Preview & Get Content</a>
+                    </div>
+                     <div class="domain-card" data-domain="Budgeting">
+                        <span class="status-tag ready">Ready</span>
+                        <h3>Budgeting & Saving</h3>
+                        <p class="description">Learn to take control of your finances with practical budgeting tips, smart saving techniques, and expense tracking methods.</p>
+                        <a href="#" class="action-link"><span class="material-icons">visibility</span> Preview & Get Content</a>
+                    </div>
+                    <div class="domain-card" data-domain="Retirement">
+                        <span class="status-tag ready">Ready</span>
+                        <h3>Retirement Planning</h3>
+                        <p class="description">Discover strategies for building a robust retirement fund, understanding different accounts, and securing your financial independence.</p>
+                        <a href="#" class="action-link"><span class="material-icons">visibility</span> Preview & Get Content</a>
+                    </div>
+                    <div class="domain-card" data-domain="DebtManagement">
+                        <span class="status-tag ready">Ready</span>
+                        <h3>Debt Management</h3>
+                        <p class="description">Learn proven methods to tackle consumer debt, understand different debt types, and build a path towards financial freedom.</p>
+                        <a href="#" class="action-link"><span class="material-icons">visibility</span> Preview & Get Content</a>
+                    </div>
+                </div>
+
+                <!-- Personalized Content Display -->
+                <div id="personalizedContentSection">
+                    <div class="loading-overlay" id="contentLoadingOverlay">
+                        <div class="loading-spinner-large"></div>
+                        <div class="loading-text">Generating personalized content...</div>
+                    </div>
+                    <h2 id="contentTitle"></h2>
+                    <p id="contentShortDescription" class="short-description"></p>
+                    <div class="meta-info">
+                        <p><strong>Domain:</strong> <span id="contentDomain"></span></p>
+                        <p><strong>Match Score:</strong> <span id="contentMatchScore"></span></p>
+                        <div id="emailStatus" class="email-status"></div>
+                    </div>
+                </div>
+                <div id="errorMessage" class="error-message"></div>
+            </div>
+
+            <!-- Tab Content: Recommendations -->
+            <div id="tab-recommendations" class="tab-content" style="display: none;">
+                <div class="engagement-dashboard-card">
+                    <h2>Engagement Dashboard</h2>
+                    <div class="chart-container">
+                        <canvas id="engagementChart"></canvas>
+                    </div>
+                    <p class="chart-info">Top 5 topics influencing your recommendations.</p>
+                </div>
+                <!-- Future recommendation stream content can go here -->
+                <div class="section-header">
+                    <h2>Your Personalized Recommendations</h2>
+                    <button class="action-btn"><span class="material-icons">sync</span> Get New</button>
+                </div>
+                <p>Recommendations coming soon...</p>
+            </div>
+
+            
+
+    <!-- Chart.js CDN (placed at the end of body for faster page load) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const domainCardsContainer = document.getElementById('domainCardsContainer');
+        const personalizedContentSection = document.getElementById('personalizedContentSection');
+        const contentLoadingOverlay = document.getElementById('contentLoadingOverlay');
+        const contentTitle = document.getElementById('contentTitle');
+        const contentShortDescription = document.getElementById('contentShortDescription');
+        const contentDomain = document.getElementById('contentDomain');
+        const contentMatchScore = document.getElementById('contentMatchScore');
+        const emailStatusDiv = document.getElementById('emailStatus');
+        const errorMessageDiv = document.getElementById('errorMessage');
+
+        // Tab switching logic
+        const tabItems = document.querySelectorAll('.tabs-nav .tab-item');
+        const tabContents = document.querySelectorAll('.main-content .tab-content');
+
+        tabItems.forEach(item => {
+            item.addEventListener('click', () => {
+                tabItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const targetTab = item.dataset.tab;
+                tabContents.forEach(content => {
+                    if (content.id === `tab-${targetTab}`) {
+                        content.style.display = 'block';
+                    } else {
+                        content.style.display = 'none';
+                    }
+                });
+
+                // If the "Recommendations" tab is clicked, update the chart
+                if (targetTab === 'recommendations') {
+                    updateEngagementDashboard('user123'); // Replace with actual user ID
+                }
+            });
+        });
+
+        // Content fetching logic (modified to listen for card clicks)
+        domainCardsContainer.addEventListener('click', async (e) => {
+            let targetCard = e.target.closest('.domain-card');
+            if (!targetCard) return; // Not a click on a card
+
+            e.preventDefault(); // Prevent default link behavior if applicable
+
+            const domain = targetCard.dataset.domain;
+
+            if (!domain) {
+                displayError("Could not determine content domain from card.");
+                return;
+            }
+
+            // Reset previous displays
+            hideError();
+            personalizedContentSection.classList.remove('active');
+            emailStatusDiv.textContent = '';
+            emailStatusDiv.className = 'email-status'; // Reset classes
+
+            // Show loading state
+            contentLoadingOverlay.classList.add('active');
+            personalizedContentSection.style.display = 'block'; // Make sure section is visible to show overlay
+
+            try {
+                // IMPORTANT: Replace with your actual backend API endpoint
+                const response = await fetch('http://127.0.0.1:5000/get-personalized-content', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        domain: domain,
+                        // user_email: userEmail // Uncomment if using user email input
+                    }),
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const content = data.personalized_content;
+                    contentTitle.textContent = content.title;
+                    contentShortDescription.textContent = content.short_description;
+                    contentDomain.textContent = content.domain;
+                    contentMatchScore.textContent = content.match_score;
+
+                    if (content.email_status === 'sent') {
+                        emailStatusDiv.innerHTML = '<span class="material-icons">check_circle</span> Personalized content email sent successfully!';
+                        emailStatusDiv.classList.add('success');
+                    } else {
+                        emailStatusDiv.innerHTML = '<span class="material-icons">error</span> Failed to send email. Check backend logs.';
+                        emailStatusDiv.classList.add('failed');
+                    }
+                    personalizedContentSection.classList.add('active');
+                    // Update the status tag on the clicked card (optional)
+                    const statusTag = targetCard.querySelector('.status-tag');
+                    if(statusTag) {
+                        statusTag.textContent = 'Viewed';
+                        statusTag.classList.remove('ready');
+                        statusTag.classList.add('sent');
+                    }
+
+                } else {
+                    displayError(data.error || "An unknown error occurred.");
+                }
+            } catch (error) {
+                console.error('Error fetching personalized content:', error);
+                displayError("Failed to connect to the backend server. Please ensure the server is running.");
+            } finally {
+                contentLoadingOverlay.classList.remove('active');
+            }
+        });
+
+        function displayError(message) {
+            errorMessageDiv.textContent = message;
+            errorMessageDiv.classList.add('active');
+            // Hide personalized content section if an error occurs
+            personalizedContentSection.classList.remove('active');
+            personalizedContentSection.style.display = 'none';
+        }
+
+        function hideError() {
+            errorMessageDiv.textContent = '';
+            errorMessageDiv.classList.remove('active');
+        }
+
+        let engagementChartInstance = null; // To hold the chart instance
+
+        // --- ENGAGEMENT DASHBOARD VISUALIZATION (Enhancement) ---
+        async function updateEngagementDashboard(userId) {
+            // FIX: Ensure API returns data and chart updates correctly
+            try {
+                // IMPORTANT: Replace with your actual backend API endpoint for engagement data
+                const ENGAGEMENT_URL = 'http://127.0.0.1:5000/get-engagement-data'; // Example endpoint
+                const response = await fetch(`${ENGAGEMENT_URL}?userId=${userId}`);
+                if (!response.ok) throw new Error('Failed to fetch engagement data');
+                const data = await response.json();
+
+                // Example data structure for testing if backend is not ready:
+                // const data = {
+                //     labels: ['Investing', 'Budgeting', 'Crypto', 'Retirement', 'Debt'],
+                //     counts: [300, 200, 150, 100, 50]
+                // };
+
+                renderChart(data.labels, data.counts);
+            } catch (error) {
+                console.error('Error fetching engagement data:', error);
+                // Optionally render a placeholder or error message in the chart area
+                const ctx = document.getElementById('engagementChart').getContext('2d');
+                if (engagementChartInstance) {
+                    engagementChartInstance.destroy();
+                }
+                ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); // Clear canvas
+                ctx.font = "16px Inter, sans-serif";
+                ctx.fillStyle = varComputedStyle('--text-medium'); // Using a CSS variable for color
+                ctx.textAlign = "center";
+                ctx.fillText("Failed to load engagement data.", ctx.canvas.width / 2, ctx.canvas.height / 2);
+            }
+        }
+
+        function renderChart(labels, data) {
+            const ctx = document.getElementById('engagementChart').getContext('2d');
+
+            if (engagementChartInstance) {
+                engagementChartInstance.destroy();
+            }
+
+            engagementChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Interactions by Topic',
+                        data: data,
+                        backgroundColor: [
+                            '#3498db', /* Blue */
+                            '#2ecc71', /* Green */
+                            '#f39c12', /* Orange */
+                            '#8e44ad', /* Purple */
+                            '#e74c3c', /* Red */
+                            '#95a5a6'  /* Grey */
+                        ],
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                boxWidth: 10,
+                                color: getComputedStyle(document.body).getPropertyValue('--text-light') // Dynamic text color
+                            }
+                        },
+                        title: { display: false }
+                    }
+                }
+            });
+        }
+
+        // Helper function to get computed style for CSS variables
+        function varComputedStyle(prop) {
+            return getComputedStyle(document.documentElement).getPropertyValue(prop);
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial track for PAGE_VIEW (if you have an analytics system)
+            // trackEvent('PAGE_VIEW', 'homepage', 'general');
+
+            // Initialize: Hide all tab contents except the active one
+            tabContents.forEach(content => {
+                if (!content.classList.contains('active')) {
+                    content.style.display = 'none';
+                }
+            });
+             // Hide the personalized content section initially
+            personalizedContentSection.style.display = 'none';
+
+            // Initial call to populate recommendations and dashboard on load if 'recommendations' tab is active
+            // Or, you can call it when the 'recommendations' tab is clicked
+            // For now, it's called when the recommendations tab is clicked.
+        });
+        
+    </script>
+</body>
+</html>
