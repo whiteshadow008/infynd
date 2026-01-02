@@ -1,0 +1,6 @@
+name,email,phone,age,segment,location,purchase_history,total_purchases,engagement_score,lifetime_value,churn_probability,preferred_channel,language,preferences,last_purchase_date
+kamalesh,717823i122@kce.ac.in,9.16E+11,19,Budget Shoppers,"Toronto, CA",237.09,8,0.3,7361.11,0.58,social,es,"Electronics, Gadgets",29-07-2025
+abi,717823i101@kce.ac.in,9.19E+11,20,High-Value Customers,Singapore,2051.36,10,0.89,1053,0.33,email,en,"Sports, Fitness",07-08-2025
+preetha,717823i140@kce.ac.in,9.19E+11,21,Tech Enthusiasts,"Toronto, CA",4881.14,2,0.6,1658.27,0.11,social,en,"Tech, Gaming",02-09-2025
+dhanush,717823i108@kce.ac.in,9.19E+11,19,High-Value,"Sydney, AU",3376.52,18,0.85,5616.13,0.23,email,es,"Electronics, Gadget",08-10-2025
+aishwaria,717823i103@kce.ac.in,9.19E+11,18,High-Value Customers,India,2077.12,12,0.86,1658.27,0.32,email,en,"Sports, Fitness",01-09-2025

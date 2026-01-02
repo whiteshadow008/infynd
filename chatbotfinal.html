@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketing Performance Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e1a;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .main-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: #00ffcc;
+            margin-bottom: 60px;
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.5);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.8;
+            color: #8892b0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .project-card {
+            background: #1a1f35;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            border: 1px solid #2a3350;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 255, 204, 0.3);
+            border-color: #00ffcc;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #00ffcc, #00d4ff);
+        }
+
+        .card-icon {
+            font-size: 4em;
+            padding: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, #1a1f35 0%, #2a3350 100%);
+            color: #00ffcc;
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .card-content h2 {
+            font-size: 1.5em;
+            color: #e6f1ff;
+            margin-bottom: 10px;
+        }
+
+        .card-content p {
+            color: #8892b0;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: rgba(0, 255, 204, 0.1);
+            color: #00ffcc;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            border: 1px solid rgba(0, 255, 204, 0.3);
+        }
+
+        .card-btn {
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            color: #0a0e1a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        .card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .slide-up {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .pulse-badge {
+            animation: pulse-badge 2s ease-in-out infinite;
+        }
+
+        #chat-toggle-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            color: white;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 255, 204, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        #chat-toggle-button svg {
+            color: white;
+        }
+
+        #chat-toggle-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0, 255, 204, 0.6);
+        }
+
+        #notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff3366;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        #chatbot-popup {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 420px;
+            max-height: calc(100vh - 40px);
+            height: 650px;
+            background: #1a1f35;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            z-index: 999;
+            overflow: hidden;
+            border: 1px solid #2a3350;
+        }
+
+        #chatbot-popup.active {
+            display: flex;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .chat-header h1 {
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            font-size: 0.85em;
+            opacity: 0.9;
+        }
+
+        #quick-actions {
+            padding: 12px;
+            background: rgba(0, 255, 204, 0.1);
+            border-bottom: 1px solid #2a3350;
+        }
+
+        .quick-actions-list {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+        }
+
+        .quick-action-button {
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            color: #0a0e1a;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-size: 0.85em;
+            white-space: nowrap;
+        }
+
+        .quick-action-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4);
+        }
+
+        #messages-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #f0f4f8 100%);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            flex-shrink: 0;
+            font-size: 0.85em;
+        }
+
+        .message.user .message-avatar {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+        }
+
+        .message.assistant .message-avatar {
+            background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+        }
+
+        .message-content {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            word-wrap: break-word;
+            line-height: 1.5;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border-radius: 18px 18px 4px 18px;
+        }
+
+        .message.assistant .message-content {
+            background: white;
+            color: #1f2937;
+            border: 1px solid #e5e7eb;
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .message.api .message-content {
+            background: #f3f4f6;
+            color: #ec4899;
+            border: 1px solid #fecdd3;
+            border-radius: 18px 18px 18px 4px;
+        }
+
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 12px 16px;
+            background: #1a1f35;
+            border: 1px solid #2a3350;
+            border-radius: 18px 18px 18px 4px;
+            width: fit-content;
+        }
+
+        .typing-indicator span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ffcc;
+            animation: bounce 1.4s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        .chat-input-section {
+            background: #1a1f35;
+            border-top: 1px solid #2a3350;
+            padding: 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .chat-input-section input {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #2a3350;
+            border-radius: 20px;
+            font-size: 0.9em;
+            background: #0a0e1a;
+            color: #e6f1ff;
+            transition: 0.3s;
+        }
+
+        .chat-input-section input:focus {
+            outline: none;
+            border-color: #00ffcc;
+            box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.1);
+        }
+
+        .chat-input-section button {
+            background: linear-gradient(135deg, #00ffcc 0%, #00d4ff 100%);
+            color: #0a0e1a;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .chat-input-section button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4);
+        }
+
+        .model-indicator {
+            font-size: 0.75em;
+            opacity: 0.7;
+            margin-top: 4px;
+            color: #8892b0;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            #chatbot-popup {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 100px);
+                max-height: 600px;
+                right: 20px;
+                left: 20px;
+                bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>📊 Marketing Performance Dashboard</h1>
+            <p>AI-Powered Analytics & Insights</p>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="project-card">
+                <div class="card-icon">🚀</div>
+                <div class="card-content">
+                    <h2>FinTech Market Predictor</h2>
+                    <p>AI-powered market share and revenue analytics for fintech companies.</p>
+                    <div class="card-tags">
+                        <span class="tag">Flask</span>
+                        <span class="tag">ML</span>
+                        <span class="tag">Python</span>
+                    </div>
+                    <button class="card-btn" onclick="window.location.href='http://localhost:4000';">View Project →</button>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-icon">📦</div>
+                <div class="card-content">
+                    <h2>Supply Demand Predictor</h2>
+                    <p>B2B supply chain forecasting for demand gaps and inventory optimization.</p>
+                    <div class="card-tags">
+                        <span class="tag">Flask</span>
+                        <span class="tag">Forecasting</span>
+                        <span class="tag">Analytics</span>
+                    </div>
+                    <button class="card-btn"onclick="window.location.href='http://localhost:8000';">View Project →</button>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="card-icon">💹</div>
+                <div class="card-content">
+                    <h2>Inflation Trend Analyzer</h2>
+                    <p>Real-time inflation predictions and trend analysis with forecasts.</p>
+                    <div class="card-tags">
+                        <span class="tag">Flask</span>
+                        <span class="tag">Prediction</span>
+                        <span class="tag">Visualization</span>
+                    </div>
+                    <button class="card-btn" onclick="window.location.href='http://localhost:3000';">View Project →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Button -->
+    <button id="chat-toggle-button" class="float-animation" aria-label="Open Chat">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span id="notification-badge" class="pulse-badge">1</span>
+    </button>
+
+    <!-- Chatbot Popup -->
+    <div id="chatbot-popup">
+        <div class="chat-header">
+            <h1>Marketing Insights AI</h1>
+            <p>Smart Analytics + Gemini API</p>
+        </div>
+
+        <div id="quick-actions">
+            <p style="font-size: 0.8em; color: #00ffcc; margin-bottom: 8px; font-weight: 600;">Quick Actions:</p>
+            <div class="quick-actions-list">
+                <button class="quick-action-button" data-query="Predict inflation Jan 2026">📈 Predict inflation Jan 2026</button>
+                <button class="quick-action-button" data-query="Demand forecast 2025-12-25">📦 Demand forecast 2025-12-25</button>
+                <button class="quick-action-button" data-query="Market share 60k customers">🚀 Market share 60k customers</button>
+            </div>
+        </div>
+
+        <div id="messages-container">
+            <div class="message assistant">
+                <div class="message-avatar">AI</div>
+                <div class="message-content">
+                    Hey! Ask me about predictions (inflation, demand, market share) or any marketing insights. I'll use the right model for you.
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-section">
+            <input type="text" id="chat-input" placeholder="Ask a question...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+
+    <script>
+        const GEMINI_API_KEY = 'AIzaSyAYfCWOHrXzcyHYCutKHM1sDsXhRvRwkGc';
+        const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent';
+        
+        const MARKETING_SYSTEM_PROMPT = `You are a Marketing Intelligence AI expert. Provide actionable marketing insights on:
+- Digital marketing strategies and campaigns
+- Consumer behavior and market research
+- Content marketing, SEO, and social media
+- Email marketing and customer retention
+- ROI analytics and performance metrics
+- Market trends and competitive analysis
+- Brand positioning and growth hacking
+
+Be specific, provide metrics, suggest tools, and focus on business impact.`;
+
+        let conversationHistory = [];
+        let isTyping = false;
+
+        // Prediction Models
+        const inflationModel = {
+            predict: (year, month) => {
+                const monthIndex = (year - 2020) * 12 + month;
+                const baseInflation = 3.5;
+                const trend = 0.015 * monthIndex;
+                const seasonal = Math.sin((month / 12) * 2 * Math.PI) * 0.5;
+                const noise = (Math.random() - 0.5) * 0.3;
+                return baseInflation + trend + seasonal + noise;
+            }
+        };
+
+        const supplyDemandModel = {
+            predict: (date) => {
+                const targetDate = new Date(date);
+                const year = targetDate.getFullYear();
+                const month = targetDate.getMonth() + 1;
+                const dayOfYear = Math.floor((targetDate - new Date(year, 0, 0)) / 86400000);
+                const baseDemand = 5000;
+                const yearEffect = (year - 2020) * 150;
+                const seasonality = Math.sin((month / 12) * 2 * Math.PI) * 800;
+                const weeklyPattern = Math.cos((dayOfYear / 7) * 2 * Math.PI) * 300;
+                const noise = (Math.random() - 0.5) * 500;
+                return Math.round(baseDemand + yearEffect + seasonality + weeklyPattern + noise);
+            }
+        };
+
+        const fintechModel = {
+            predictMarketShare: (customers, revenue, fee, growth) => {
+                const baseShare = 5;
+                const customerEffect = (customers / 100000) * 2;
+                const revenueEffect = (revenue / 10000000) * 1.5;
+                const feeEffect = (3 - fee) * 0.5;
+                const growthEffect = growth * 0.3;
+                const noise = (Math.random() - 0.5) * 1;
+                return Math.max(0.5, Math.min(25, baseShare + customerEffect + revenueEffect + feeEffect + growthEffect + noise));
+            },
+            predictRevenue: (customers, fee, marketShare) => {
+                const baseRevenue = customers * fee * 12;
+                const marketEffect = marketShare * 100000;
+                const noise = (Math.random() - 0.5) * 500000;
+                return Math.max(100000, baseRevenue + marketEffect + noise);
+            }
+        };
+
+        // Check if query matches predefined patterns
+        function checkPredefinedQuery(query) {
+            const lowerQuery = query.toLowerCase();
+
+            // Inflation prediction
+            const inflationMatch = lowerQuery.match(/inflation.*?(january|february|march|april|may|june|july|august|september|october|november|december).*?(\d{4})/i);
+            if (inflationMatch || (lowerQuery.includes('inflation') && lowerQuery.match(/\d{4}/))) {
+                const months = { january: 1, february: 2, march: 3, april: 4, may: 5, june: 6, july: 7, august: 8, september: 9, october: 10, november: 11, december: 12 };
+                const monthName = inflationMatch ? inflationMatch[1].toLowerCase() : 'january';
+                const yearMatch = lowerQuery.match(/\d{4}/);
+                const year = yearMatch ? parseInt(yearMatch[0]) : new Date().getFullYear();
+                const month = months[monthName] || 1;
+                const predictedInflation = inflationModel.predict(year, month);
+                const avgInflation = 4.2;
+                const deviation = predictedInflation - avgInflation;
+                let status = "MODERATE", emoji = "➡️";
+                if (predictedInflation > avgInflation + 1) { status = "HIGH"; emoji = "⚠️"; }
+                else if (predictedInflation < avgInflation - 1) { status = "LOW"; emoji = "✅"; }
+                return {
+                    matched: true,
+                    type: 'local',
+                    response: `💹 Inflation for ${monthName.charAt(0).toUpperCase() + monthName.slice(1)} ${year}\n\n📊 Rate: ${predictedInflation.toFixed(2)}%\n📈 Average: ${avgInflation.toFixed(2)}%\n📉 Deviation: ${deviation > 0 ? '+' : ''}${deviation.toFixed(2)}%\n\n${emoji} Status: ${status}`
+                };
+            }
+
+            // Supply/Demand prediction
+            const dateMatch = lowerQuery.match(/(\d{4}-\d{2}-\d{2})|(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{4})/);
+            if ((lowerQuery.includes('demand') || lowerQuery.includes('supply')) && dateMatch) {
+                const dateStr = dateMatch[0];
+                const demand = supplyDemandModel.predict(dateStr);
+                const inventory = 4500 + Math.floor(Math.random() * 2000);
+                const gap = demand - inventory;
+                let status = "BALANCED", statusEmoji = "✅";
+                if (gap > 500) { status = "SHORTAGE"; statusEmoji = "⚠️"; }
+                else if (gap < -500) { status = "OVERSTOCK"; statusEmoji = "📦"; }
+                return {
+                    matched: true,
+                    type: 'local',
+                    response: `📦 Forecast ${dateStr}\n\n📊 Demand: ${demand.toLocaleString()}\n📦 Inventory: ${inventory.toLocaleString()}\n📈 Gap: ${gap > 0 ? '+' : ''}${gap.toLocaleString()}\n\n${statusEmoji} Status: ${status}`
+                };
+            }
+
+            // Market/FinTech prediction
+            if (lowerQuery.includes('market') || lowerQuery.includes('fintech') || lowerQuery.includes('customers')) {
+                const customersMatch = lowerQuery.match(/(\d+)\s*(k|thousand)/i);
+                const customers = customersMatch ? parseFloat(customersMatch[1]) * 1000 : 50000;
+                const marketShare = fintechModel.predictMarketShare(customers, 5000000, 2.5, 15);
+                const predictedRevenue = fintechModel.predictRevenue(customers, 2.5, marketShare);
+                return {
+                    matched: true,
+                    type: 'local',
+                    response: `🚀 FinTech Analysis\n\nInput:\n• Customers: ${customers.toLocaleString()}\n• Fee: 2.5%\n• Growth: 15%\n\n📊 Predictions:\n• Market Share: ${marketShare.toFixed(2)}%\n• Revenue: ₹${(predictedRevenue / 1000000).toFixed(2)}M`
+                };
+            }
+
+            return { matched: false };
+        }
+
+        // Send message via Gemini API
+        async function sendViaGemini(userMessage) {
+            conversationHistory.push({
+                role: 'user',
+                parts: [{ text: userMessage }]
+            });
+
+            try {
+                const response = await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: 'user',
+                            parts: [{ text: MARKETING_SYSTEM_PROMPT + '\n\nUser message: ' + userMessage }]
+                        }],
+                        generationConfig: {
+                            temperature: 0.8,
+                            topP: 0.95,
+                            topK: 40,
+                            maxOutputTokens: 2048,
+                        },
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const assistantMessage = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response from model.';
+                
+                conversationHistory.push({
+                    role: 'model',
+                    parts: [{ text: assistantMessage }]
+                });
+
+                return {
+                    type: 'api',
+                    response: assistantMessage
+                };
+            } catch (error) {
+                return {
+                    type: 'api',
+                    response: '⚠️ Error: ' + error.message + '. Please check your API key and try again.'
+                };
+            }
+        }
+
+        // Display message
+        function displayMessage(role, text, modelType = 'api') {
+            const container = document.getElementById('messages-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role === 'user' ? 'user' : modelType}`;
+            const avatar = role === 'user' ? 'You' : 'AI';
+            
+            let html = `
+                <div class="message-avatar">${avatar.charAt(0)}</div>
+                <div class="message-content">
+                    ${formatResponse(text)}
+            `;
+            
+            if (role === 'assistant' && modelType === 'local') {
+                html += '<div class="model-indicator">📊 Local Model</div>';
+            } else if (role === 'assistant' && modelType === 'api') {
+                html += '<div class="model-indicator">🤖 Gemini AI</div>';
+            }
+            
+            html += '</div>';
+            messageDiv.innerHTML = html;
+            container.appendChild(messageDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Display typing indicator
+        function displayTyping() {
+            const container = document.getElementById('messages-container');
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typingIndicator';
+            typingDiv.className = 'message assistant';
+            typingDiv.innerHTML = `
+                <div class="message-avatar">AI</div>
+                <div class="typing-indicator"><span></span><span></span><span></span></div>
+            `;
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        // Remove typing indicator
+        function removeTyping() {
+            const typing = document.getElementById('typingIndicator');
+            if (typing) typing.remove();
+        }
+
+        // Format response
+        function formatResponse(text) {
+            return text
+                .replace(/\n/g, '<br>')
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>');
+        }
+
+        // Main send handler
+        async function sendMessage() {
+            const chatInput = document.getElementById('chat-input');
+            const message = chatInput.value.trim();
+            if (!message || isTyping) return;
+
+            displayMessage('user', message);
+            chatInput.value = '';
+            isTyping = true;
+            displayTyping();
+
+            // Check if it's a predefined query
+            const predefinedResult = checkPredefinedQuery(message);
+            
+            setTimeout(async () => {
+                removeTyping();
+                
+                if (predefinedResult.matched) {
+                    displayMessage('assistant', predefinedResult.response, 'local');
+                } else {
+                    const geminiResult = await sendViaGemini(message);
+                    displayMessage('assistant', geminiResult.response, geminiResult.type);
+                }
+                
+                isTyping = false;
+            }, predefinedResult.matched ? 800 : 1500);
+        }
+
+        // Toggle Chat
+        document.getElementById('chat-toggle-button').addEventListener('click', function() {
+            const popup = document.getElementById('chatbot-popup');
+            popup.classList.toggle('active');
+            if (popup.classList.contains('active')) {
+                document.getElementById('chat-input').focus();
+            }
+        });
+
+        // Send button click
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+
+        // Enter key to send
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        // Quick action buttons
+        document.querySelectorAll('.quick-action-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.getElementById('chat-input').value = this.getAttribute('data-query');
+                sendMessage();
+            });
+        });
+
+        // Initialize lucide icons
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>

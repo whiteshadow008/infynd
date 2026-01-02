@@ -1,0 +1,201 @@
+Company Name,Category,Market Share (%),Pricing Index (1-10),Average Transaction Fee (INR),Inflation Adjusted Fee (INR),Customer Base (millions),Growth Rate (%),Revenue (crore),Pricing Tier
+FinTechCo1,WealthTech,0.12,5.02,15.26,16.18,14.73,39.41,4461.68,Medium
+FinTechCo2,Remittance,0.4,9.37,7.87,8.34,17.09,48.47,281.52,High
+FinTechCo3,Neobank,0.25,4.14,5.2,5.51,11.33,29.43,3973.66,Medium
+FinTechCo4,Remittance,0.03,3.11,4.5,4.77,17.86,47.98,2324.78,Low
+FinTechCo5,Remittance,0.14,7.96,5.4,5.72,22.5,27.38,4079.78,High
+FinTechCo6,Digital Lending,0.14,8.24,5.86,6.21,15.62,-0.63,2573.08,High
+FinTechCo7,Neobank,0.58,5.25,4.54,4.81,13.52,21.34,2981.19,Medium
+FinTechCo8,Neobank,0.6,6.02,17.63,18.69,11,27.34,2449.29,Medium
+FinTechCo9,Neobank,0.08,7.22,15.26,16.18,14.46,41.81,3890.9,High
+FinTechCo10,Remittance,2.95,3.31,1.41,1.49,8.92,1.93,3303.93,Low
+FinTechCo11,WealthTech,0.15,9.17,5.74,6.08,9.82,4.1,2348.07,High
+FinTechCo12,Neobank,1.82,8.76,0.93,0.99,13.32,12.14,3907.38,High
+FinTechCo13,Fintech Platform,0.26,4.7,10.21,10.82,1.71,12.32,1107.56,Medium
+FinTechCo14,Remittance,0.02,3.1,9.79,10.38,5.76,42.59,712.25,Low
+FinTechCo15,Digital Lending,0.2,9.07,16.71,17.71,13.59,11.3,726,High
+FinTechCo16,WealthTech,0.49,6.26,6.5,6.89,10.82,36.15,1506.37,Medium
+FinTechCo17,Fintech Platform,0.55,6.51,16.42,17.41,8.35,27.13,1077.91,High
+FinTechCo18,Fintech Platform,0.37,7.45,19.38,20.54,18.28,32.26,4185.76,High
+FinTechCo19,Digital Lending,0.29,7,2.22,2.35,17.36,49.48,480.72,High
+FinTechCo20,WealthTech,0.39,9.14,15.94,16.9,4.21,21.28,3146.96,High
+FinTechCo21,Remittance,0.43,9.14,12,12.72,21.97,45.11,855.55,High
+FinTechCo22,Digital Payments,0.04,8.64,9.86,10.45,12.41,22.43,3967.96,High
+FinTechCo23,WealthTech,0.22,7.14,8.7,9.22,18.55,18,4326.11,High
+FinTechCo24,Digital Lending,0.13,8.21,15.8,16.75,14.35,57.31,2097.29,High
+FinTechCo25,Fintech Platform,0.79,7.4,12.97,13.75,24.94,6.98,3956.43,High
+FinTechCo26,Remittance,0.31,6.73,16.2,17.17,18.82,0.87,28.13,High
+FinTechCo27,WealthTech,1.98,3.84,18.11,19.2,17.69,45.11,3690.66,Low
+FinTechCo28,Digital Payments,0.25,8.27,12.54,13.29,19.48,-0.56,1032.67,High
+FinTechCo29,Digital Payments,0.82,8.33,19.62,20.8,3.62,49.41,4089.61,High
+FinTechCo30,Neobank,0.77,7.07,12.36,13.1,5.15,23.42,10.03,High
+FinTechCo31,Neobank,0.08,8.33,12.91,13.68,17.87,54.51,2505.04,High
+FinTechCo32,Digital Lending,0.34,7.23,11.32,12,12.37,41.9,3406.08,High
+FinTechCo33,WealthTech,0.58,4.34,2.27,2.41,18.88,34.68,1167.8,Medium
+FinTechCo34,WealthTech,0.95,4.78,14.66,15.54,2.62,56.7,873.13,Medium
+FinTechCo35,Fintech Platform,0.19,4.39,11.18,11.85,13.44,20.78,383.02,Medium
+FinTechCo36,Fintech Platform,0.12,5.45,9.29,9.85,9.5,57.02,1472.32,Medium
+FinTechCo37,Fintech Platform,0.6,3.25,18.25,19.35,11.45,3.78,2521.5,Low
+FinTechCo38,Neobank,0.8,7.02,6.31,6.69,15.12,26.44,525.72,High
+FinTechCo39,WealthTech,0.21,5.19,10.71,11.35,12.58,12.54,1698.25,Medium
+FinTechCo40,WealthTech,0.05,7.26,14.1,14.95,13.52,30.09,45.78,High
+FinTechCo41,Digital Payments,1.37,5.51,16.03,16.99,12.18,5.53,3684.96,Medium
+FinTechCo42,Neobank,0.25,7.43,9.46,10.03,10.25,49.7,582.38,High
+FinTechCo43,Remittance,0.35,5.21,16.92,17.94,19.31,50.02,1278.63,Medium
+FinTechCo44,Neobank,0.88,4.69,15.49,16.42,0.35,57.09,87.83,Medium
+FinTechCo45,Remittance,0.54,6.22,1.79,1.9,14.98,5.05,1947.92,Medium
+FinTechCo46,Digital Payments,0.64,7.5,1.39,1.47,14.16,35.52,3781.35,High
+FinTechCo47,Digital Lending,0.11,5.26,12.61,13.37,17.92,25.83,1767.72,Medium
+FinTechCo48,WealthTech,0.38,9.09,7.27,7.71,15,17.38,811.84,High
+FinTechCo49,Digital Payments,0.58,3.25,4.58,4.85,20.68,17.85,3392.88,Low
+FinTechCo50,WealthTech,0.13,5.72,11.8,12.51,23.98,21.83,3550.69,Medium
+FinTechCo51,Fintech Platform,0.09,9.29,7.16,7.59,8.6,40.82,786.02,High
+FinTechCo52,Digital Lending,1.95,6.56,10.98,11.64,5.72,33.89,3469.99,High
+FinTechCo53,Digital Lending,0.35,5.75,9.47,10.04,10.62,24.88,4263.1,Medium
+FinTechCo54,Digital Payments,0.15,6.7,11.9,12.61,7.23,-0.06,752.87,High
+FinTechCo55,Digital Lending,2.7,6.74,8.31,8.81,15.39,0.05,3470.57,High
+FinTechCo56,Remittance,1.63,7.76,14.1,14.95,22.8,-4.85,3190.03,High
+FinTechCo57,Digital Lending,0.4,3.83,4.01,4.25,3.52,57.9,2133.71,Low
+FinTechCo58,WealthTech,1.04,4.63,14.08,14.92,2.56,-4.66,265.35,Medium
+FinTechCo59,WealthTech,0.1,6.77,8.53,9.04,6.44,1.7,340.75,High
+FinTechCo60,WealthTech,0.16,8.64,17.55,18.6,18.17,15.45,3836.6,High
+FinTechCo61,WealthTech,0.58,6.65,10.55,11.18,14.84,47.48,4455.72,High
+FinTechCo62,Remittance,0.91,4.55,19.48,20.65,2.6,57.54,3043.85,Medium
+FinTechCo63,Neobank,0.94,7.42,12.24,12.97,22.97,46.35,2009.58,High
+FinTechCo64,Fintech Platform,0.25,7.81,4.87,5.16,19.76,39.89,2915.84,High
+FinTechCo65,Digital Payments,1.06,4.55,16.52,17.51,0.62,28.88,2676.81,Medium
+FinTechCo66,WealthTech,0.92,5.46,7.23,7.66,16.3,0.64,1729.34,Medium
+FinTechCo67,Digital Lending,1.33,6.47,7.28,7.72,19.29,57.28,299.99,Medium
+FinTechCo68,WealthTech,0.74,6.23,1.12,1.19,9.39,44.3,3697.7,Medium
+FinTechCo69,Digital Lending,0.53,5.53,11.2,11.87,1.77,36.53,1676.39,Medium
+FinTechCo70,Fintech Platform,0.42,4.93,10.92,11.58,1.98,44.34,3685.44,Medium
+FinTechCo71,Fintech Platform,0.23,3.65,7.44,7.89,2.65,42.07,1140.03,Low
+FinTechCo72,Fintech Platform,1.36,3.35,17.94,19.02,21.02,36.42,9.63,Low
+FinTechCo73,Digital Lending,1.76,9.23,3.01,3.19,22.77,58.74,719.43,High
+FinTechCo74,WealthTech,0.16,8.51,6.94,7.36,3.11,53.72,2111.08,High
+FinTechCo75,Fintech Platform,0.18,5.31,6.77,7.18,5.94,37.03,4249.64,Medium
+FinTechCo76,Remittance,0.32,9.22,2.3,2.44,4.18,40.06,464.36,High
+FinTechCo77,Digital Lending,0.29,7.4,9.88,10.47,4.7,-1.65,3844.67,High
+FinTechCo78,Digital Lending,2.51,6.14,13.91,14.74,20.95,38.54,2373.97,Medium
+FinTechCo79,WealthTech,0.09,6.2,10.48,11.11,8.34,-2.13,3717.51,Medium
+FinTechCo80,Digital Lending,0.01,3.54,3.56,3.77,7.82,33.24,1346.19,Low
+FinTechCo81,Digital Lending,0.33,3.6,7.86,8.33,5.72,59.96,3780.56,Low
+FinTechCo82,Fintech Platform,0.1,6.92,0.55,0.58,15.22,31.13,3478.84,High
+FinTechCo83,WealthTech,0.22,6.6,17.43,18.48,9.51,25.76,1039.09,High
+FinTechCo84,Fintech Platform,0.66,4.38,2.15,2.28,18.62,15.34,595.35,Medium
+FinTechCo85,Fintech Platform,0.62,9.15,12.15,12.88,5.18,2.83,3906.9,High
+FinTechCo86,WealthTech,0.18,8.08,19.73,20.91,19.71,42.52,4334.75,High
+FinTechCo87,Digital Payments,0.38,3.74,10.96,11.62,15.11,7.52,145.7,Low
+FinTechCo88,Fintech Platform,0.34,9.05,18.52,19.63,2.9,2.49,3292.06,High
+FinTechCo89,Remittance,0.49,9.33,5.1,5.41,10.39,22.41,4093.31,High
+FinTechCo90,Remittance,0.14,9.47,15.32,16.24,21.59,46.7,3858.83,High
+FinTechCo91,Digital Lending,0.43,3.36,10.86,11.51,23.08,43.43,4340.52,Low
+FinTechCo92,Remittance,1.87,7.79,14.55,15.42,11.67,-1.43,3421.62,High
+FinTechCo93,Digital Lending,0.32,6.55,1.72,1.82,12.05,24.58,1993.13,High
+FinTechCo94,Digital Payments,1.14,7.59,3.38,3.58,22.97,28.96,1407.22,High
+FinTechCo95,WealthTech,0.28,9.3,3.1,3.29,14.7,36.9,1446.74,High
+FinTechCo96,WealthTech,0.21,7.47,13.9,14.73,0.87,37.26,3261.28,High
+FinTechCo97,WealthTech,0.5,8.44,16.97,17.99,22.82,18.71,3357.54,High
+FinTechCo98,Remittance,0.53,8.63,15.12,16.03,6.24,31.44,905.61,High
+FinTechCo99,Digital Payments,0.97,8.45,1.09,1.16,14.46,26.27,3907.21,High
+FinTechCo100,Remittance,0.13,5.77,17.41,18.45,4.18,52.52,3218.58,Medium
+FinTechCo101,Remittance,0.33,4.45,7.41,7.85,0.9,29.47,2534.56,Medium
+FinTechCo102,Digital Payments,0.41,5.58,8.24,8.73,7.82,23.67,2124.54,Medium
+FinTechCo103,Digital Payments,0.71,8.8,2.54,2.69,19.52,21.29,2446.83,High
+FinTechCo104,Digital Payments,0.02,3.95,14.88,15.77,6.98,32.21,720.81,Low
+FinTechCo105,Digital Payments,2.52,6.34,4.05,4.29,5.54,47.26,920.64,Medium
+FinTechCo106,WealthTech,0.31,4.52,11.5,12.19,5.36,30,414.78,Medium
+FinTechCo107,Neobank,0.16,6.78,16.89,17.9,12.9,38.01,695.69,High
+FinTechCo108,Neobank,1.04,8.61,2.24,2.37,24.39,42.96,2044.35,High
+FinTechCo109,Digital Payments,0.67,8.72,10.94,11.6,11.5,28.81,2388.94,High
+FinTechCo110,Neobank,1.48,4.54,5.05,5.35,13.95,22.74,85.29,Medium
+FinTechCo111,Neobank,0.19,8.9,7.19,7.62,21.52,51.98,3586.61,High
+FinTechCo112,Digital Payments,0.39,6.85,9.74,10.32,13.4,22.14,1327.29,High
+FinTechCo113,Neobank,0.41,5.28,7.42,7.87,4.65,25.03,4103.7,Medium
+FinTechCo114,Remittance,1.9,7.6,13.15,13.94,7.52,59.37,4353.96,High
+FinTechCo115,Digital Lending,0.04,6.13,9.85,10.44,7.78,-4.98,838.64,Medium
+FinTechCo116,Digital Lending,0.18,5.46,11.89,12.6,9.96,7.06,2082.13,Medium
+FinTechCo117,Digital Payments,0.1,7.58,14.87,15.76,10.7,19.96,10.54,High
+FinTechCo118,WealthTech,0.15,4.62,11.38,12.06,20,55.62,2694.48,Medium
+FinTechCo119,Digital Payments,0.32,5.15,11.94,12.66,8.77,-0.45,2734.84,Medium
+FinTechCo120,WealthTech,0.23,5.82,11.51,12.2,11.73,-4.38,1117.69,Medium
+FinTechCo121,Digital Lending,0.24,4.65,7.89,8.36,15.64,-1.58,2515.06,Medium
+FinTechCo122,Digital Payments,0.9,5.63,7.08,7.5,9.47,0.76,1018.8,Medium
+FinTechCo123,Fintech Platform,1.29,6.71,18.04,19.12,20.92,-2.56,727.91,High
+FinTechCo124,Remittance,0.04,7.82,12.35,13.09,14.71,26.19,2933.58,High
+FinTechCo125,Neobank,0.11,7.99,5.26,5.58,7.39,32.75,1470.03,High
+FinTechCo126,WealthTech,0.54,8.35,10.22,10.83,17.87,12.66,2658.24,High
+FinTechCo127,Fintech Platform,0.21,7.84,6.94,7.36,13.21,20.89,1952.44,High
+FinTechCo128,Neobank,0.14,7.43,18.71,19.83,13.38,0.96,4429.66,High
+FinTechCo129,Neobank,0.17,4.54,0.65,0.69,12.05,16.86,677.36,Medium
+FinTechCo130,Digital Payments,0.19,5.6,4.89,5.18,12.45,28.96,2093.37,Medium
+FinTechCo131,Neobank,0.91,6.11,7.62,8.08,19.15,42.6,3063.65,Medium
+FinTechCo132,Remittance,0.07,3.54,10.01,10.61,2.62,-4.78,1782.98,Low
+FinTechCo133,Fintech Platform,0.6,6.43,17.09,18.12,8.39,25.38,4386.28,Medium
+FinTechCo134,Neobank,0.39,5.84,2.21,2.34,1.93,14.31,3249.88,Medium
+FinTechCo135,Digital Payments,0.17,8.21,16.21,17.18,18.84,50.43,2958.14,High
+FinTechCo136,Remittance,0.26,9.36,1.59,1.69,6.84,41.51,3407.98,High
+FinTechCo137,Digital Lending,0.14,6.61,16.93,17.95,22.44,33.29,4287.16,High
+FinTechCo138,Fintech Platform,0.46,5.1,1.51,1.6,13.19,13.02,4085.64,Medium
+FinTechCo139,Neobank,0.04,3.28,0.86,0.91,20.03,54.17,3260.66,Low
+FinTechCo140,Digital Payments,0,9.01,14.09,14.94,24.47,-2.07,3372.48,High
+FinTechCo141,Digital Lending,0.48,8.97,19.95,21.15,21,2.12,660.92,High
+FinTechCo142,Digital Lending,0.1,4.64,17.98,19.06,21.68,20.46,467.05,Medium
+FinTechCo143,WealthTech,0.04,7.52,11.73,12.43,10.23,3.09,2571.22,High
+FinTechCo144,Remittance,0.24,3.49,18.39,19.49,13.82,57.17,87.56,Low
+FinTechCo145,Neobank,0.03,4.08,0.6,0.64,6.38,46.87,2173.19,Medium
+FinTechCo146,Digital Payments,1.05,4.41,19.51,20.68,4.94,11.83,950.52,Medium
+FinTechCo147,WealthTech,0.01,4.91,10.07,10.67,12.66,33.26,1560.34,Medium
+FinTechCo148,Remittance,0.42,9.47,14.6,15.48,14.9,58.85,3492.24,High
+FinTechCo149,WealthTech,0.28,7.53,16.51,17.5,8.51,52.47,4235.86,High
+FinTechCo150,Fintech Platform,0.54,5.5,14.51,15.38,14.26,34.05,330.51,Medium
+FinTechCo151,Remittance,0.19,7.79,10.93,11.59,22.19,53.74,2406.42,High
+FinTechCo152,Remittance,0.08,8.95,9.79,10.38,13.94,59.3,3971.99,High
+FinTechCo153,Neobank,1.94,9.23,16.85,17.86,18.03,43.32,375.88,High
+FinTechCo154,Remittance,0.88,3.38,4.5,4.77,20.14,-0.78,3711.19,Low
+FinTechCo155,WealthTech,0.95,5.56,19.38,20.54,24.72,21.1,1613.32,Medium
+FinTechCo156,Remittance,0.14,3.69,14.36,15.22,15.1,49.46,1452.82,Low
+FinTechCo157,Neobank,0.02,5.18,4.39,4.65,20.18,9.99,4398.71,Medium
+FinTechCo158,Neobank,0.17,4.1,14.86,15.75,24.07,48.99,907.86,Medium
+FinTechCo159,Fintech Platform,0.37,7.2,10.83,11.48,23.61,2.82,3120.91,High
+FinTechCo160,WealthTech,0.19,5.52,14.29,15.15,3.57,-1.95,3697.38,Medium
+FinTechCo161,Digital Lending,0.85,4.49,15.47,16.4,10.19,19.97,190.12,Medium
+FinTechCo162,Digital Lending,0.15,4.73,2.2,2.33,8.13,-2.61,3018.38,Medium
+FinTechCo163,Remittance,1.63,5.34,10.37,10.99,2.22,57.22,4282.22,Medium
+FinTechCo164,Fintech Platform,0.3,4.69,18.67,19.79,15.85,48.7,563.37,Medium
+FinTechCo165,Digital Payments,0.89,5.95,6.75,7.16,18.41,47.05,4033.51,Medium
+FinTechCo166,Remittance,0.1,3.21,12.08,12.8,21.21,35.94,2678.52,Low
+FinTechCo167,Fintech Platform,0.26,4.82,7.7,8.16,3.11,9.06,2776.64,Medium
+FinTechCo168,WealthTech,0.58,5.67,9.36,9.92,21.92,28.69,2760.18,Medium
+FinTechCo169,WealthTech,0.07,6.92,11.2,11.87,16.09,33.82,1348.27,High
+FinTechCo170,WealthTech,0.07,4.76,11.2,11.87,17.61,29.13,4208.73,Medium
+FinTechCo171,WealthTech,1.69,3.87,4.43,4.7,22.77,11.92,4263.34,Low
+FinTechCo172,WealthTech,0.61,3.5,13.85,14.68,15.64,28.49,2815.74,Low
+FinTechCo173,Fintech Platform,0.02,9.11,2.21,2.34,8.43,26.93,3526.49,High
+FinTechCo174,Fintech Platform,0.25,5.71,3.21,3.4,20.64,59.76,2757.1,Medium
+FinTechCo175,Neobank,0.27,6.78,0.55,0.58,9.11,53.33,2182.37,High
+FinTechCo176,Digital Lending,0.66,8.97,2.78,2.95,0.9,25.12,2975.39,High
+FinTechCo177,WealthTech,0.14,3.54,9.73,10.31,20.77,35.49,2490.74,Low
+FinTechCo178,Digital Payments,0.1,8.7,12.32,13.06,8.66,43.61,2690.65,High
+FinTechCo179,Fintech Platform,0.04,6.59,15.99,16.95,19.36,-2.73,3528.33,High
+FinTechCo180,Digital Payments,0.27,4.07,2.58,2.73,9.1,53.17,2166.66,Medium
+FinTechCo181,Digital Payments,0.56,5.67,17.09,18.12,21.53,50.91,188.19,Medium
+FinTechCo182,Digital Payments,0.03,8.05,15.05,15.95,5.53,24.73,742.18,High
+FinTechCo183,Neobank,1.19,6.12,8.47,8.98,24.36,20.43,1976.54,Medium
+FinTechCo184,Fintech Platform,0.28,9.4,18.69,19.81,19.5,12.74,3263.1,High
+FinTechCo185,Digital Payments,0.13,5.45,19.82,21.01,2.9,25.98,2671.79,Medium
+FinTechCo186,WealthTech,0.05,7.87,4.5,4.77,14.17,-2.12,2928.07,High
+FinTechCo187,Remittance,0.1,5.55,7.89,8.36,24.63,50.39,2159.36,Medium
+FinTechCo188,Digital Payments,1.32,8.39,18.57,19.68,11.8,-2.7,2772.76,High
+FinTechCo189,Neobank,0.49,6.7,14.57,15.44,4.59,16.39,1483.93,High
+FinTechCo190,Fintech Platform,0.35,3.41,1.44,1.53,12.15,55.55,2118.47,Low
+FinTechCo191,Neobank,0.52,3.24,15.74,16.68,12.84,42.79,3350.53,Low
+FinTechCo192,Digital Payments,0.28,3.87,16.64,17.64,18.56,13.29,3923.89,Low
+FinTechCo193,Fintech Platform,0.63,3.09,15.13,16.04,17.49,11.42,1954.28,Low
+FinTechCo194,Remittance,0.02,3.49,16.09,17.06,10.09,-4.67,201.26,Low
+FinTechCo195,Digital Payments,0.4,7.5,16.59,17.59,5.49,40.22,731.72,High
+FinTechCo196,Neobank,0.08,6.47,4.13,4.38,16.14,-1.83,98.77,Medium
+FinTechCo197,Digital Lending,0.06,7.87,5.1,5.41,10.57,29.62,2941.42,High
+FinTechCo198,WealthTech,0.2,8.94,12.86,13.63,3.35,57.54,1498.75,High
+FinTechCo199,Neobank,0.05,6.8,18.2,19.29,22.52,2.12,2443.44,High
+FinTechCo200,Fintech Platform,0.05,7.72,6.67,7.07,17.3,53.14,2222.28,High
